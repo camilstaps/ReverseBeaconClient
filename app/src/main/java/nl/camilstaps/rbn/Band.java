@@ -47,4 +47,8 @@ public class Band {
             return ((int) (wavelength * 100)) + "cm";
         return ((int) wavelength) + "m";
     }
+
+    public float getWavelength() {
+        return wavelength;
+    }
 }

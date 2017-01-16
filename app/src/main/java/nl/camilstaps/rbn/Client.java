@@ -77,7 +77,6 @@ public final class Client {
                 Record record = Record.factory(line);
                 for (NewRecordListener listener : listeners)
                     listener.receive(record);
-                Log.i("RBN", "PIr: " + record);
             } catch (ParseException e) {
                 for (NewRecordListener listener : listeners)
                     listener.unparsable(line, e);

@@ -12,6 +12,7 @@ import java.util.TimeZone;
 public final class Record {
     private final Callsign dx, de;
     private final float frequency;
+    private final Band band;
     private final Mode mode;
     private final int strength;
     private final Speed speed;
@@ -23,6 +24,7 @@ public final class Record {
         this.dx = dx;
         this.de = de;
         this.frequency = frequency;
+        this.band = new Band(frequency);
         this.mode = mode;
         this.strength = strength;
         this.speed = speed;
@@ -68,9 +70,12 @@ public final class Record {
             Speed.SpeedUnit speedUnit = Speed.SpeedUnit.valueOf(sc.next());
             Speed speed = new Speed(speedValue, speedUnit);
 
-            Type type = Type.valueOf(sc.next());
+            StringBuilder typeSb = new StringBuilder();
+            do {
+                typeSb.append(sc.next());
+            } while (!sc.hasNext("\\d{4}Z"));
+            Type type = Type.valueOf(typeSb.toString());
 
-            sc.useDelimiter("(\\s+|Z)");
             DateFormat df = new SimpleDateFormat("HHmm");
             Date parsed_date = df.parse(sc.next());
             Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Zulu"));
@@ -81,6 +86,8 @@ public final class Record {
             return new Record(dx, de, frequency, mode, strength, speed, type, date);
         } catch (IllegalStateException | NoSuchElementException e) {
             throw new ParseException("Internal scanner error", 0);
+        } catch (IllegalArgumentException e) {
+            throw new ParseException("Unknown value", 0);
         }
     }
 
@@ -88,15 +95,51 @@ public final class Record {
         DateFormat df = new SimpleDateFormat("HH:mm");
         df.setTimeZone(TimeZone.getTimeZone("Zulu"));
         return df.format(date) + "Z\t" + "\tDX de " + dx + "\t" +
-                new Band(frequency) + "\t" + frequency + "\t" + de +
-                "\t" + mode + "\t" + strength + " dB\t" + speed + "\t" + type;
+                band + "\t" + frequency + "\t" + de + "\t" +
+                mode + "\t" + strength + " dB\t" + speed + "\t" + type;
+    }
+
+    public Callsign getDx() {
+        return dx;
+    }
+
+    public Callsign getDe() {
+        return de;
+    }
+
+    public float getFrequency() {
+        return frequency;
+    }
+
+    public Band getBand() {
+        return band;
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public int getStrength() {
+        return strength;
+    }
+
+    public Speed getSpeed() {
+        return speed;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public Date getDate() {
+        return date;
     }
 
     public enum Mode {
-        CW, PSK31, RTTY
+        CW, PSK125, PSK31, PSK63, RTTY
     }
 
     public enum Type {
-        CQ, BEACON, NCDXF
+        BEACON, CQ, NCDXF, NCDXFB
     }
 }

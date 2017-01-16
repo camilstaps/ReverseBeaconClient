@@ -1,9 +1,5 @@
 package nl.camilstaps.rbn;
 
-/**
- * Created by camil on 1/15/17.
- */
-
 public class Band {
     private float wavelength;
 

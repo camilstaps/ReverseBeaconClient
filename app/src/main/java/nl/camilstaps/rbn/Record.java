@@ -5,12 +5,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.TimeZone;
-
-/**
- * Created by camil on 1/14/17.
- */
 
 public final class Record {
     private final Callsign dx, de;
@@ -49,38 +46,42 @@ public final class Record {
     }
 
     public static Record factory(String logline) throws ParseException {
-        Scanner sc = new Scanner(logline);
+        try {
+            Scanner sc = new Scanner(logline);
 
-        sc.findInLine("DX de ");
-        sc.useDelimiter(":");
-        String dx = sc.next();
-        sc.useDelimiter("\\s+");
-        sc.next(":");
+            sc.findInLine("DX de ");
+            sc.useDelimiter(":");
+            String dx = sc.next();
+            sc.useDelimiter("\\s+");
+            sc.next(":");
 
-        float frequency = sc.nextFloat();
+            float frequency = sc.nextFloat();
 
-        String de = sc.next();
+            String de = sc.next();
 
-        Mode mode = Mode.valueOf(sc.next());
+            Mode mode = Mode.valueOf(sc.next());
 
-        int strength = sc.nextInt();
-        sc.next("dB");
+            int strength = sc.nextInt();
+            sc.next("dB");
 
-        int speedValue = sc.nextInt();
-        Speed.SpeedUnit speedUnit = Speed.SpeedUnit.valueOf(sc.next());
-        Speed speed = new Speed(speedValue, speedUnit);
+            int speedValue = sc.nextInt();
+            Speed.SpeedUnit speedUnit = Speed.SpeedUnit.valueOf(sc.next());
+            Speed speed = new Speed(speedValue, speedUnit);
 
-        Type type = Type.valueOf(sc.next());
+            Type type = Type.valueOf(sc.next());
 
-        sc.useDelimiter("(\\s+|Z)");
-        DateFormat df = new SimpleDateFormat("HHmm");
-        Date parsed_date = df.parse(sc.next());
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Zulu"));
-        cal.set(Calendar.HOUR_OF_DAY, parsed_date.getHours());
-        cal.set(Calendar.MINUTE, parsed_date.getMinutes());
-        Date date = cal.getTime();
+            sc.useDelimiter("(\\s+|Z)");
+            DateFormat df = new SimpleDateFormat("HHmm");
+            Date parsed_date = df.parse(sc.next());
+            Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Zulu"));
+            cal.set(Calendar.HOUR_OF_DAY, parsed_date.getHours());
+            cal.set(Calendar.MINUTE, parsed_date.getMinutes());
+            Date date = cal.getTime();
 
-        return new Record(dx, de, frequency, mode, strength, speed, type, date);
+            return new Record(dx, de, frequency, mode, strength, speed, type, date);
+        } catch (IllegalStateException | NoSuchElementException e) {
+            throw new ParseException("Internal scanner error", 0);
+        }
     }
 
     public String toString() {
@@ -96,6 +97,6 @@ public final class Record {
     }
 
     public enum Type {
-        CQ, BEACON
+        CQ, BEACON, NCDXF
     }
 }

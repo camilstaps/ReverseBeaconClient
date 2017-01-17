@@ -1,7 +1,5 @@
 package nl.camilstaps.rbn;
 
-import android.util.Log;
-
 import org.apache.commons.net.telnet.TelnetClient;
 
 import java.io.BufferedReader;
@@ -30,13 +28,10 @@ public final class Client {
         inputStream = client.getInputStream();
         outputStream = new PrintStream(client.getOutputStream());
 
-        Log.i("RBN", "Connected");
-
         readUntil("Please enter your call:");
         outputStream.print(call + "\r\n");
         outputStream.flush();
-
-        Log.i("RBN", "logged in");
+        readUntil(">\r\n\r\n");
 
         bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         (new Thread(new ClientThread())).start();
@@ -80,8 +75,8 @@ public final class Client {
             } catch (ParseException e) {
                 for (NewRecordListener listener : listeners)
                     listener.unparsable(line, e);
-                Log.i("RBN", "PIp: " + e.getMessage());
-                Log.i("RBN", line);
+                e.printStackTrace();
+                System.err.println(line);
             } catch (Exception e) {
                 e.printStackTrace();
             }

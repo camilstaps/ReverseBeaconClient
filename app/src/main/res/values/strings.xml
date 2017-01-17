@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">ReverseBeaconClient</string>
+
+    <string name="title_activity_settings">Settings</string>
+    <string name="pref_connection">Connection</string>
+    <string name="pref_host">RBN host</string>
+    <string name="pref_host_summ">The telnet host to connect to</string>
+    <string name="pref_host_default" translatable="false">telnet.reversebeacon.net</string>
+    <string name="pref_port">RBN port</string>
+    <string name="pref_port_summ">The port of the telnet host</string>
+    <string name="pref_port_default" translatable="false">7000</string>
+    <string name="pref_callsign">Callsign</string>
+    <string name="pref_callsign_summ">Your callsign (to \'login\' at the RBN)</string>
+    <string name="pref_callsign_default" translatable="false"></string>
+
+    <string-array name="side_nav_titles">
+        <item>List</item>
+        <item>Settings</item>
+    </string-array>
 </resources>

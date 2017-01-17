@@ -24,7 +24,7 @@ public final class Record {
         this.dx = dx;
         this.de = de;
         this.frequency = frequency;
-        this.band = new Band(frequency);
+        this.band = Band.fromFrequency(frequency);
         this.mode = mode;
         this.strength = strength;
         this.speed = speed;
@@ -52,10 +52,10 @@ public final class Record {
             Scanner sc = new Scanner(logline);
 
             sc.findInLine("DX de ");
-            sc.useDelimiter(":");
+            sc.useDelimiter("-#:");
             String dx = sc.next();
             sc.useDelimiter("\\s+");
-            sc.next(":");
+            sc.next("-#:");
 
             float frequency = sc.nextFloat();
 
@@ -140,6 +140,6 @@ public final class Record {
     }
 
     public enum Type {
-        BEACON, CQ, NCDXF, NCDXFB
+        BEACON, CQ, DX, NCDXF, NCDXFB
     }
 }

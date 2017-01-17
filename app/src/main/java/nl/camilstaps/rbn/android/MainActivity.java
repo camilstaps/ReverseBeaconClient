@@ -1,145 +1,80 @@
 package nl.camilstaps.rbn.android;
 
-import android.content.Context;
-import android.graphics.PorterDuff;
-import android.os.AsyncTask;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-
-import nl.camilstaps.rbn.Band;
-import nl.camilstaps.rbn.Client;
 import nl.camilstaps.rbn.R;
-import nl.camilstaps.rbn.Record;
 
 public class MainActivity extends AppCompatActivity {
+    private DrawerLayout drawer;
+    private ListView drawerList;
 
-    private Toast toast;
+    private LoggingFragment loggingFragment;
+    private SettingsFragment settingsFragment;
+    private Fragment currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        final ListView callListView = (ListView) findViewById(R.id.activity_main_calllist);
-        final ArrayList<Record> records = new ArrayList<>();
-        final RecordArrayAdapter adapter = new RecordArrayAdapter(this, records);
-        callListView.setAdapter(adapter);
+        try {
+            setContentView(R.layout.activity_main);
 
-        quickToast("Connecting...");
+            String[] titles = getResources().getStringArray(R.array.side_nav_titles);
+            drawer = (DrawerLayout) findViewById(R.id.activity_main_drawer);
+            drawerList = (ListView) findViewById(R.id.activity_main_drawer_list);
+            drawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, titles));
+            drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... x) {
-                try {
-                    Client client = new Client("PD7LOL", "telnet.reversebeacon.net", 7000);
-                    client.register(new Client.NewRecordListener() {
-                        @Override
-                        public void receive (final Record record){
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    records.add(record);
-                                    adapter.notifyDataSetChanged();
-                                }
-                            });
-                        }
+            loggingFragment = new LoggingFragment();
+            loggingFragment.start(this);
+            settingsFragment = new SettingsFragment();
 
-                        @Override
-                        public void unparsable (String line, ParseException e){
-                            quickToast(e.toString() + ":\n" + line);
-                        }
-                    });
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    quickToast("IOException: " + e.getMessage());
-                }
-                return null;
-            }
-        }.execute();
-    }
-
-    private void quickToast(final String text) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (toast == null)
-                    toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
-                else
-                    toast.setText(text);
-                toast.show();
-            }
-        });
-    }
-
-    private class RecordArrayAdapter extends ArrayAdapter<Record> {
-        private Context context;
-        private List<Record> objects;
-
-        public RecordArrayAdapter(Context context, List<Record> objects) {
-            super(context, -1, objects);
-            this.context = context;
-            this.objects = objects;
+            getFragmentManager().beginTransaction()
+                    .add(R.id.activity_main_content, loggingFragment).commit();
+            currentFragment = loggingFragment;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
 
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Record r = getItem(position);
-
-            LayoutInflater inflater = (LayoutInflater)
-                    context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.record_item, parent, false);
-
-            ((TextView) rowView.findViewById(R.id.record_item_callsign))
-                    .setText(r.getDe().toString());
-            ((TextView) rowView.findViewById(R.id.record_item_frequency))
-                    .setText(String.format("%.2f", r.getFrequency()));
-            ((TextView) rowView.findViewById(R.id.record_item_band_text))
-                    .setText(r.getBand().toString());
-            ((TextView) rowView.findViewById(R.id.record_item_mode))
-                    .setText(r.getMode().toString());
-            ((ImageView) rowView.findViewById(R.id.record_item_band_icon))
-                    .setColorFilter(bandToColour(r.getBand()), PorterDuff.Mode.SRC);
-
-            ((TextView) rowView.findViewById(R.id.record_item_description))
-                    .setText(Util.fromHtml(r.getStrength() + "dB de " + r.getDx() + " &#8226; " +
-                            r.getSpeed() + " &#8226; " + r.getType()));
-
-            return rowView;
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
         }
-
-        @Override
-        public Record getItem(int position) {
-            return super.getItem(super.getCount() - position - 1);
-        }
-
     }
-    private int bandToColour(Band band) {
-        switch ((int) (100 * band.getWavelength())) {
-            case 16000: return 0xffffe000;
-            case  8000: return 0xff093f00;
-            case  4000: return 0xffffa500;
-            case  3000: return 0xffff0000;
-            case  2000: return 0xff800080;
-            case  1700: return 0xff0000ff;
-            case  1500: return 0xffff00ff;
-            case  1200: return 0xff00ffff;
-            case  1000: return 0xffaaaaaa;
-            case   600: return 0xffffc0cb;
-            case   200: return 0xff92ff7f;
+
+    private void selectItem(int position) {
+        Fragment fragment;
+        switch (position) {
+            case 0:
+                fragment = loggingFragment;
+                break;
+            case 1:
+                fragment = settingsFragment;
+                break;
+            default:
+                throw new IllegalArgumentException("How did you do that!?");
         }
-        return 0xaa888888;
+
+        if (fragment != currentFragment) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.activity_main_content, fragment)
+                    .addToBackStack(null)
+                    .commit();
+            currentFragment = fragment;
+        }
+
+        drawer.closeDrawer(drawerList);
     }
 }

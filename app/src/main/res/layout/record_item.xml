@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="wrap_content"
     android:padding="6dip">
 
     <ImageView
         android:id="@+id/record_item_flag"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="6dip"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_width="30dip"
+        android:layout_height="30dip" />
 
     <LinearLayout
         android:id="@+id/record_item_rightblock"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:orientation="vertical"
         android:gravity="center_vertical">
@@ -47,13 +44,14 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_toRightOf="@id/record_item_flag"
         android:layout_toLeftOf="@id/record_item_rightblock"
-        android:layout_marginRight="5dp">
+        android:layout_marginRight="5dip"
+        android:layout_marginLeft="6dip">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -80,9 +78,8 @@
             android:id="@+id/record_item_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:text="12dB de OH6BG &#8226; 12 WPM &#8226; CQ"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

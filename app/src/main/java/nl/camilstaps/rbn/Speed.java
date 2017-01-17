@@ -1,8 +1,8 @@
 package nl.camilstaps.rbn;
 
 public class Speed {
-    public int value;
-    public SpeedUnit unit;
+    public final int value;
+    public final SpeedUnit unit;
 
     public Speed(int value, SpeedUnit unit) {
         this.value = value;

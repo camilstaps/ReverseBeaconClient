@@ -1,6 +1,8 @@
 package nl.camilstaps.rbn;
 
-public class Speed {
+import java.io.Serializable;
+
+public class Speed implements Serializable {
 	public final int value;
 	public final SpeedUnit unit;
 

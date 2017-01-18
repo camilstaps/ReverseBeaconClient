@@ -1,5 +1,6 @@
 package nl.camilstaps.rbn;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,7 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.TimeZone;
 
-public final class Record {
+public final class Record implements Serializable {
 	private final Callsign dx, de;
 	private final float frequency;
 	private final Band band;
@@ -135,11 +136,11 @@ public final class Record {
 		return date;
 	}
 
-	public enum Mode {
+	public enum Mode implements Serializable {
 		CW, PSK125, PSK31, PSK63, RTTY
 	}
 
-	public enum Type {
+	public enum Type implements Serializable {
 		BEACON, CQ, DX, NCDXF, NCDXFB
 	}
 }

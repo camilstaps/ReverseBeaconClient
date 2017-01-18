@@ -32,16 +32,22 @@ public class MainActivity extends AppCompatActivity {
 			drawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, titles));
 			drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-			loggingFragment = new LoggingFragment();
-			loggingFragment.start(this);
-			settingsFragment = new SettingsFragment();
+			if (savedInstanceState == null) {
+				loggingFragment = new LoggingFragment();
+				settingsFragment = new SettingsFragment();
 
-			getFragmentManager().beginTransaction()
-					.add(R.id.activity_main_content, loggingFragment).commit();
-			currentFragment = loggingFragment;
+				getFragmentManager().beginTransaction()
+						.add(R.id.activity_main_content, loggingFragment).commit();
+				currentFragment = loggingFragment;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
 	}
 
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {

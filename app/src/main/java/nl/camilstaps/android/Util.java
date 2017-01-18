@@ -1,6 +1,5 @@
 package nl.camilstaps.android;
 
-import android.app.Activity;
 import android.text.Html;
 import android.text.Spanned;
 import android.widget.Toast;
@@ -18,23 +17,5 @@ public final class Util {
 			result = Html.fromHtml(html);
 		}
 		return result;
-	}
-
-	public static void quickToast(final Activity activity, final String text) {
-		if (activity == null)
-			return;
-
-		if (toast == null)
-			toast = Toast.makeText(activity.getApplicationContext(), "", Toast.LENGTH_LONG);
-
-		activity.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if (toast != null) {
-					toast.setText(text);
-					toast.show();
-				}
-			}
-		});
 	}
 }

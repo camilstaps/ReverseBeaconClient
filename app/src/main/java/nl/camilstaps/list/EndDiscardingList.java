@@ -2,13 +2,14 @@ package nl.camilstaps.list;
 
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-public class EndDiscardingList<E> implements List<E> {
+public class EndDiscardingList<E> implements List<E>, Serializable {
 	private transient Object[] elements;
 	private int cursor = 0;
 	private boolean looped = false;

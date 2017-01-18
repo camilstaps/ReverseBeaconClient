@@ -3,12 +3,8 @@ package nl.camilstaps.rbn.android;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.List;
 
@@ -32,68 +29,76 @@ import nl.camilstaps.rbn.filter.Filter;
 import nl.camilstaps.rbn.filter.RangeFilter;
 
 public class LoggingFragment extends Fragment {
-	private final List<Record> records = new EndDiscardingList<>(100);
+	private Activity activity;
+
 	private RecordArrayAdapter adapter;
+	private EndDiscardingList<Record> records = new EndDiscardingList<>(100);
 
-	public void start(final Activity activity) {
-		Util.quickToast(activity, "Connecting...");
+	private View view;
 
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		if (activity == null)
+			activity = getActivity();
+
+		if (savedInstanceState != null) {
+			records = (EndDiscardingList<Record>) savedInstanceState.getSerializable("records");
+			adapter = (RecordArrayAdapter) savedInstanceState.getSerializable("adapter");
+		} else {
+			adapter = new RecordArrayAdapter(activity, records);
+			registerLogger();
+		}
+	}
+
+	private void registerLogger() {
 		final AnyOfFilter erf1 = AnyOfFilter.just(Filter.Field.Mode, Record.Mode.CW);
 		final AnyOfFilter erf2 = AnyOfFilter.just(Filter.Field.Band, new Band(20));
 		final RangeFilter rrf1 = new RangeFilter(Filter.Field.Speed, 0, 20, Speed.SpeedUnit.WPM);
 
-		new AsyncTask<Void, Void, Void>() {
+		((RBNApplication) activity.getApplication()).registerClientListener(new Client.NewRecordListener() {
 			@Override
-			protected Void doInBackground(Void... x) {
-				try {
-					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-					Resources ress = activity.getResources();
-					Client client = new Client(
-							prefs.getString("callsign", ress.getString(R.string.pref_callsign_default)),
-							prefs.getString("host", ress.getString(R.string.pref_host_default)),
-							Integer.valueOf(prefs.getString("port", ress.getString(R.string.pref_port_default))));
-					Util.quickToast(activity, "Listening...");
-					client.register(new Client.NewRecordListener() {
+			public void receive(final Record record) {
+				if (erf1.matches(record) && erf2.matches(record) && rrf1.matches(record)) {
+					activity.runOnUiThread(new Runnable() {
 						@Override
-						public void receive(final Record record) {
-							activity.runOnUiThread(new Runnable() {
-								@Override
-								public void run() {
-									if (erf1.matches(record) && erf2.matches(record) && rrf1.matches(record)) {
-										records.add(record);
-										if (adapter != null)
-											adapter.notifyDataSetChanged();
-									}
-								}
-							});
-						}
-
-						@Override
-						public void unparsable(String line, ParseException e) {
-							Util.quickToast(activity, e.toString() + ":\n" + line);
+						public void run() {
+							records.add(record);
+							adapter.notifyDataSetChanged();
 						}
 					});
-				} catch (Exception e) {
-					e.printStackTrace();
-					Util.quickToast(activity, "IOException: " + e.getMessage());
 				}
-				return null;
 			}
-		}.execute();
+
+			@Override
+			public void unparsable(String line, ParseException e) {
+				((RBNApplication) getActivity().getApplication()).quickToast(e.toString() + ":\n" + line);
+			}
+		});
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		final View view = inflater.inflate(R.layout.fragment_log, container, false);
+		if (view != null)
+			return view;
+
+		view = inflater.inflate(R.layout.fragment_log, container, false);
 		final ListView callListView = (ListView) view.findViewById(R.id.fragment_log_calllist);
-		adapter = new RecordArrayAdapter(inflater.getContext(), records);
 		callListView.setAdapter(adapter);
 
 		return view;
 	}
 
-	private class RecordArrayAdapter extends ArrayAdapter<Record> {
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable("records", records);
+		outState.putSerializable("adapter", adapter);
+	}
+
+	private class RecordArrayAdapter extends ArrayAdapter<Record> implements Serializable {
 		private Context context;
 
 		public RecordArrayAdapter(Context context, List<Record> objects) {
@@ -111,7 +116,7 @@ public class LoggingFragment extends Fragment {
 
 			try {
 				((ImageView) rowView.findViewById(R.id.record_item_flag))
-						.setImageResource(getResources().getIdentifier(
+						.setImageResource(activity.getResources().getIdentifier(
 								"flag_" + r.getDe().getCountry().toString().toLowerCase(),
 								"drawable", "nl.camilstaps.rbn"));
 			} catch (Exception e) {

@@ -1,7 +1,9 @@
 package nl.camilstaps.rbn.android;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,8 +17,6 @@ public class MainActivity extends AppCompatActivity {
 	private DrawerLayout drawer;
 	private ListView drawerList;
 
-	private LoggingFragment loggingFragment;
-	private SettingsFragment settingsFragment;
 	private Fragment currentFragment;
 
 	@Override
@@ -32,12 +32,12 @@ public class MainActivity extends AppCompatActivity {
 			drawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, titles));
 			drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-			if (savedInstanceState == null) {
-				loggingFragment = new LoggingFragment();
-				settingsFragment = new SettingsFragment();
+			FragmentManager fm = getFragmentManager();
+			Fragment loggingFragment = fm.findFragmentByTag("log");
 
-				getFragmentManager().beginTransaction()
-						.add(R.id.activity_main_content, loggingFragment).commit();
+			if (loggingFragment == null) {
+				loggingFragment = new LoggingFragment();
+				fm.beginTransaction().add(R.id.activity_main_content, loggingFragment, "log").commit();
 				currentFragment = loggingFragment;
 			}
 		} catch (Exception e) {
@@ -58,26 +58,46 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void selectItem(int position) {
+		FragmentManager fm = getFragmentManager();
 		Fragment fragment;
+		String[] tags = new String[] {"log", "pref"};
+		boolean add = false;
+
 		switch (position) {
 			case 0:
-				fragment = loggingFragment;
+				fragment = fm.findFragmentByTag("log");
+				if (fragment == null) {
+					fragment = new LoggingFragment();
+					add = true;
+				}
 				break;
 			case 1:
-				fragment = settingsFragment;
+				fragment = fm.findFragmentByTag("pref");
+				if (fragment == null) {
+					fragment = new SettingsFragment();
+					add = true;
+				}
 				break;
 			default:
 				throw new IllegalArgumentException("How did you do that!?");
 		}
 
-		if (fragment != currentFragment) {
-			getFragmentManager()
-					.beginTransaction()
-					.replace(R.id.activity_main_content, fragment)
-					.addToBackStack(null)
-					.commit();
-			currentFragment = fragment;
+		FragmentTransaction ft = fm.beginTransaction();
+
+		for (String tag : tags) {
+			Fragment frag = fm.findFragmentByTag(tag);
+			if (frag != null && frag != fragment)
+				ft.hide(frag);
 		}
+
+		if (add)
+			ft.add(R.id.activity_main_content, fragment, tags[position]);
+		else
+			ft.show(fragment);
+
+		ft.addToBackStack(null).commit();
+
+		currentFragment = fragment;
 
 		drawer.closeDrawer(drawerList);
 	}

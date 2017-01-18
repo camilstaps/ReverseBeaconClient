@@ -34,22 +34,17 @@ public class LoggingFragment extends Fragment {
 	private RecordArrayAdapter adapter;
 	private EndDiscardingList<Record> records = new EndDiscardingList<>(100);
 
-	private View view;
-
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onAttach(Context context) {
+		super.onAttach(context);
+
+		setRetainInstance(true);
 
 		if (activity == null)
 			activity = getActivity();
 
-		if (savedInstanceState != null) {
-			records = (EndDiscardingList<Record>) savedInstanceState.getSerializable("records");
-			adapter = (RecordArrayAdapter) savedInstanceState.getSerializable("adapter");
-		} else {
-			adapter = new RecordArrayAdapter(activity, records);
-			registerLogger();
-		}
+		adapter = new RecordArrayAdapter(activity, records);
+		registerLogger();
 	}
 
 	private void registerLogger() {
@@ -81,10 +76,7 @@ public class LoggingFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		if (view != null)
-			return view;
-
-		view = inflater.inflate(R.layout.fragment_log, container, false);
+		View view = inflater.inflate(R.layout.fragment_log, container, false);
 		final ListView callListView = (ListView) view.findViewById(R.id.fragment_log_calllist);
 		callListView.setAdapter(adapter);
 

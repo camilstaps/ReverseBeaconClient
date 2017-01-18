@@ -11,9 +11,7 @@
 		android:name=".android.RBNApplication"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
-		<activity
-			android:name=".android.MainActivity"
-			android:configChanges="orientation|screenSize">
+		<activity android:name=".android.MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />

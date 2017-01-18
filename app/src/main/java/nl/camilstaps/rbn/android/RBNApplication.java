@@ -26,7 +26,7 @@ public final class RBNApplication extends Application {
 		if (client == null) {
 			quickToast("Connecting...");
 
-			new AsyncTask<Void, Void, Void>() {
+			new AsyncTask<Void, Exception, Void>() {
 				@Override
 				protected Void doInBackground(Void... x) {
 					try {
@@ -39,9 +39,18 @@ public final class RBNApplication extends Application {
 						client.register(listener);
 					} catch (Exception e) {
 						e.printStackTrace();
-						quickToast("IOException: " + e.getMessage());
+						publishProgress(e);
 					}
 					return null;
+				}
+
+				protected void onProgressUpdate(Exception... es) {
+					for (Exception e : es)
+						quickToast(e.getMessage());
+				}
+
+				protected void onPostExecute(Void result) {
+					quickToast("Listening...");
 				}
 			}.execute();
 		} else {

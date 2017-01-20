@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="640"
+    android:viewportHeight="480"
+    android:width="640dp"
+    android:height="480dp">
+    <group
+        android:scaleX="0.9374998"
+        android:scaleY="0.9374998"
+        android:translateX="148.75"
+        android:translateY="3.079001E-05">
+        <path
+            android:pathData="M-180 -0.000030517578H844.00012V256H-180Z"
+            android:fillColor="#000000" />
+        <path
+            android:pathData="M-180 255.99988H844.00012V511.99994H-180Z"
+            android:fillColor="#107b00" />
+        <path
+            android:pathData="M-180 169.30821H844.00012V345.43622H-180Z"
+            android:fillColor="#ffffff" />
+        <path
+            android:pathData="M309.97669 195.54613c-45.20183 -19.42323 -84.10728 20.64384 -84.06304 58.08456 0.0459 39.15777 38.02071 80.91895 86.16838 62.43124 -34.08691 -10.03847 -48.15586 -35.21577 -48.1493 -60.67979 -0.24576 -25.21661 15.88592 -54.5407 46.04396 -59.83601z"
+            android:fillColor="#ff00ff" />
+        <group
+            android:scaleX="1.6384"
+            android:scaleY="1.6384"
+            android:rotation="0.7098386"
+            android:translateX="-176.9926"
+            android:translateY="-1.780742">
+            <path
+                android:pathData="M331.8761 176.56204l-15.90909 -11.31718 -15.71867 11.7239 5.8471 -18.62764 -16.00743 -11.32646 19.5228 -0.19533 5.82553 -18.72404 6.21865 18.50692 19.60781 -0.24564 -15.67946 11.63324z"
+                android:fillColor="#ff1800" />
+        </group>
+        <path
+            android:pathData="M314.33647 315.64742c-50.51679 17.5358 -88.55389 -20.48 -89.21581 -59.45591 -0.66027 -38.9759 37.58982 -79.16749 89.47304 -60.86493 -29.35522 4.35323 -50.91165 30.08103 -51.16888 59.16919 -0.19661 21.99388 12.81065 53.34467 50.91165 61.15165z"
+            android:fillColor="#ff0000" />
+        <path
+            android:pathData="M-179.98351 0.000043251969L168.63443 256.61769l-348.63439 255.38237 0.002 -509.3782987 0.0148 -2.621718048031z"
+            android:fillColor="#ff0000" />
+    </group>
+</vector>

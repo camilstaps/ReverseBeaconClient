@@ -1,7 +1,7 @@
 ##### Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm #####
 ##### (thanks to https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore) #####
 
-/*.iml
+*.iml
 
 ## Directory-based project format:
 .idea/

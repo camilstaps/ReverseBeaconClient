@@ -18,4 +18,11 @@ public final class Util {
 		}
 		return result;
 	}
+
+	public static String formatFloat(float f) {
+		if (f == (int) f)
+			return String.format("%d", (int) f);
+		else
+			return String.format("%s", f);
+	}
 }

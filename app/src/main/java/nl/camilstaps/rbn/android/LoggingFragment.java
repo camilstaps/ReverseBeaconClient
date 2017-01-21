@@ -23,10 +23,7 @@ import nl.camilstaps.rbn.Band;
 import nl.camilstaps.rbn.Client;
 import nl.camilstaps.rbn.R;
 import nl.camilstaps.rbn.Record;
-import nl.camilstaps.rbn.Speed;
-import nl.camilstaps.rbn.filter.AnyOfFilter;
 import nl.camilstaps.rbn.filter.Filter;
-import nl.camilstaps.rbn.filter.RangeFilter;
 
 public class LoggingFragment extends Fragment {
 	private Activity activity;
@@ -48,14 +45,12 @@ public class LoggingFragment extends Fragment {
 	}
 
 	private void registerLogger() {
-		final AnyOfFilter erf1 = AnyOfFilter.just(Filter.Field.Mode, Record.Mode.CW);
-		final AnyOfFilter erf2 = AnyOfFilter.just(Filter.Field.Band, new Band(20));
-		final RangeFilter rrf1 = new RangeFilter(Filter.Field.Speed, 0, 20, Speed.SpeedUnit.WPM);
+		final Filter filter = ((RBNApplication) getActivity().getApplication()).getMainFilter();
 
 		((RBNApplication) activity.getApplication()).registerClientListener(new Client.NewRecordListener() {
 			@Override
 			public void receive(final Record record) {
-				if (erf1.matches(record) && erf2.matches(record) && rrf1.matches(record)) {
+				if (filter.matches(record)) {
 					activity.runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
@@ -136,22 +131,22 @@ public class LoggingFragment extends Fragment {
 		public Record getItem(int position) {
 			return super.getItem(getCount() - position - 1);
 		}
-	}
 
-	private int bandToColour(Band band) {
-		switch ((int) (100 * band.getWavelength())) {
-			case 16000: return 0xffffe000;
-			case  8000: return 0xff093f00;
-			case  4000: return 0xffffa500;
-			case  3000: return 0xffff0000;
-			case  2000: return 0xff800080;
-			case  1700: return 0xff0000ff;
-			case  1500: return 0xffff00ff;
-			case  1200: return 0xff00ffff;
-			case  1000: return 0xffaaaaaa;
-			case   600: return 0xffffc0cb;
-			case   200: return 0xff92ff7f;
+		private int bandToColour(Band band) {
+			switch ((int) (100 * band.getWavelength())) {
+				case 16000: return 0xffffe000;
+				case  8000: return 0xff093f00;
+				case  4000: return 0xffffa500;
+				case  3000: return 0xffff0000;
+				case  2000: return 0xff800080;
+				case  1700: return 0xff0000ff;
+				case  1500: return 0xffff00ff;
+				case  1200: return 0xff00ffff;
+				case  1000: return 0xffaaaaaa;
+				case   600: return 0xffffc0cb;
+				case   200: return 0xff92ff7f;
+			}
+			return 0xff888888;
 		}
-		return 0xaa888888;
 	}
 }

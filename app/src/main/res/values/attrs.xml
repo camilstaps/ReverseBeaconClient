@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<declare-styleable name="RangePreference">
+		<attr name="defaultMinValue" format="float"/>
+		<attr name="defaultMaxValue" format="float"/>
+	</declare-styleable>
+</resources>

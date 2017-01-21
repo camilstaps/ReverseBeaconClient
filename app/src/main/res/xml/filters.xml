@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<nl.camilstaps.android.MultiSelectListPreference
+		android:key="filter_band"
+		android:title="Band"
+		android:entries="@array/bands"
+		android:entryValues="@array/band_values"
+		android:defaultValue="@array/band_values"/>
+
+	<nl.camilstaps.android.MultiSelectListPreference
+		android:key="filter_mode"
+		android:title="Mode"
+		android:entries="@array/modes"
+		android:entryValues="@array/modes"
+		android:defaultValue="@array/modes"/>
+
+	<nl.camilstaps.android.MultiSelectListPreference
+		android:key="filter_type"
+		android:title="Type"
+		android:entries="@array/types"
+		android:entryValues="@array/types"
+		android:defaultValue="@array/types"/>
+
+	<nl.camilstaps.android.RangePreference
+		android:key="filter_speed"
+		android:title="Speed (WPM)"
+		app:defaultMinValue="0.0"
+		app:defaultMaxValue="50.0"/>
+
+</PreferenceScreen>

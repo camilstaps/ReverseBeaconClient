@@ -15,6 +15,62 @@
 
 	<string-array name="side_nav_titles">
 		<item>List</item>
+		<item>Filters</item>
 		<item>Settings</item>
+	</string-array>
+
+	<string-array name="bands">
+		<item>160m</item>
+		<item>80m</item>
+		<item>60m</item>
+		<item>40m</item>
+		<item>30m</item>
+		<item>20m</item>
+		<item>17m</item>
+		<item>15m</item>
+		<item>12m</item>
+		<item>10m</item>
+		<item>6m</item>
+		<item>4m</item>
+		<item>2m</item>
+		<item>1m25</item>
+		<item>70cm</item>
+		<item>33cm</item>
+		<item>23cm</item>
+	</string-array>
+	<string-array name="band_values">
+		<item>16000</item>
+		<item>8000</item>
+		<item>6000</item>
+		<item>4000</item>
+		<item>3000</item>
+		<item>2000</item>
+		<item>1700</item>
+		<item>1500</item>
+		<item>1200</item>
+		<item>1000</item>
+		<item>600</item>
+		<item>400</item>
+		<item>200</item>
+		<item>125</item>
+		<item>70</item>
+		<item>33</item>
+		<item>23</item>
+	</string-array>
+
+	<string-array name="modes">
+		<item>CW</item>
+		<item>PSK125</item>
+		<item>PSK31</item>
+		<item>PSK63</item>
+		<item>RTTY</item>
+	</string-array>
+
+	<string-array name="types">
+		<item>BEACON</item>
+		<item>CQ</item>
+		<item>DX</item>
+		<item>NCDXF</item>
+		<item>NCDXFB</item>
 	</string-array>
 </resources>

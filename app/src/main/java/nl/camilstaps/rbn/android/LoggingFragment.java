@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.TimeZone;
 
 import nl.camilstaps.android.Util;
 import nl.camilstaps.list.EndDiscardingList;
@@ -94,37 +98,54 @@ public class LoggingFragment extends Fragment {
 		}
 
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
+		@NonNull
+		public View getView(int position, View view, @NonNull ViewGroup parent) {
+			RecordItemViewHolder holder;
+
+			if (view == null) {
+				holder = new RecordItemViewHolder();
+
+				LayoutInflater inflater = (LayoutInflater)
+						context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				view = inflater.inflate(R.layout.record_item, parent, false);
+
+				holder.band = (TextView) view.findViewById(R.id.record_item_band_text);
+				holder.bandIcon = (ImageView) view.findViewById(R.id.record_item_band_icon);
+				holder.callsign = (TextView) view.findViewById(R.id.record_item_callsign);
+				holder.description = (TextView) view.findViewById(R.id.record_item_description);
+				holder.flag = (ImageView) view.findViewById(R.id.record_item_flag);
+				holder.frequency = (TextView) view.findViewById(R.id.record_item_frequency);
+				holder.mode = (TextView) view.findViewById(R.id.record_item_mode);
+				holder.time = (TextView) view.findViewById(R.id.record_item_time);
+
+				view.setTag(holder);
+			} else {
+				holder = (RecordItemViewHolder) view.getTag();
+			}
+
 			Record r = getItem(position);
 
-			LayoutInflater inflater = (LayoutInflater)
-					context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			View rowView = inflater.inflate(R.layout.record_item, parent, false);
-
 			try {
-				((ImageView) rowView.findViewById(R.id.record_item_flag))
-						.setImageResource(activity.getResources().getIdentifier(
-								"flag_" + r.getDe().getCountry().toString().toLowerCase(),
-								"drawable", "nl.camilstaps.rbn"));
+				holder.flag.setImageResource(activity.getResources().getIdentifier(
+						"flag_" + r.getDe().getCountry().toString().toLowerCase(),
+						"drawable", "nl.camilstaps.rbn"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			((TextView) rowView.findViewById(R.id.record_item_callsign))
-					.setText(r.getDe().toString());
-			((TextView) rowView.findViewById(R.id.record_item_frequency))
-					.setText(String.format("%.2f", r.getFrequency()));
-			((TextView) rowView.findViewById(R.id.record_item_band_text))
-					.setText(r.getBand().toString());
-			((TextView) rowView.findViewById(R.id.record_item_mode))
-					.setText(r.getMode().toString());
-			((ImageView) rowView.findViewById(R.id.record_item_band_icon))
-					.setColorFilter(bandToColour(r.getBand()), PorterDuff.Mode.SRC);
+			holder.callsign.setText(r.getDe().toString());
+			holder.frequency.setText(String.format("%.2f", r.getFrequency()));
+			holder.band.setText(r.getBand().toString());
+			holder.bandIcon.setColorFilter(bandToColour(r.getBand()), PorterDuff.Mode.SRC);
+			holder.mode.setText(r.getMode().toString());
 
-			((TextView) rowView.findViewById(R.id.record_item_description))
-					.setText(Util.fromHtml(r.getStrength() + "dB de " + r.getDx() + " &#8226; " +
-							r.getSpeed() + " &#8226; " + r.getType()));
+			holder.description.setText(Util.fromHtml(r.getStrength() + "dB de " + r.getDx() +
+					" &#8226; " + r.getSpeed() + " &#8226; " + r.getType()));
 
-			return rowView;
+			DateFormat df = new SimpleDateFormat("HH:mm'Z'");
+			df.setTimeZone(TimeZone.getTimeZone("Zulu"));
+			holder.time.setText(df.format(r.getDate()));
+
+			return view;
 		}
 
 		@Override
@@ -148,5 +169,10 @@ public class LoggingFragment extends Fragment {
 			}
 			return 0xff888888;
 		}
+	}
+
+	private static class RecordItemViewHolder {
+		private ImageView bandIcon, flag;
+		private TextView band, callsign, description, frequency, mode, time;
 	}
 }

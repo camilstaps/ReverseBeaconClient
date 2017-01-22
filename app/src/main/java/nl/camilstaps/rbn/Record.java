@@ -1,5 +1,7 @@
 package nl.camilstaps.rbn;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -11,7 +13,8 @@ import java.util.Scanner;
 import java.util.TimeZone;
 
 public final class Record implements Serializable {
-	private final Callsign dx, de;
+	private final Callsign dx;
+	private final Callsign de;
 	private final float frequency;
 	private final Band band;
 	private final Mode mode;
@@ -100,10 +103,12 @@ public final class Record implements Serializable {
 				mode + "\t" + strength + " dB\t" + speed + "\t" + type;
 	}
 
+	@NonNull
 	public Callsign getDx() {
 		return dx;
 	}
 
+	@NonNull
 	public Callsign getDe() {
 		return de;
 	}

@@ -12,7 +12,8 @@ import nl.camilstaps.rbn.R;
 
 public class RangePreference extends DialogPreference {
 	private EditText minEditText, maxEditText;
-	private float defaultMin, defaultMax;
+	private final float defaultMin;
+	private final float defaultMax;
 
 	public RangePreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -22,6 +23,8 @@ public class RangePreference extends DialogPreference {
 
 		defaultMin = attributes.getFloat(R.styleable.RangePreference_defaultMinValue, 0);
 		defaultMax = attributes.getFloat(R.styleable.RangePreference_defaultMaxValue, 100);
+
+		attributes.recycle();
 	}
 
 	public float getMinValue() {

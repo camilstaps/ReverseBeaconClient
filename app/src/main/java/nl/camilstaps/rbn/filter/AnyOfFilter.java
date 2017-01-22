@@ -25,10 +25,11 @@ public class AnyOfFilter<T> implements Filter, Collection<T> {
 	public static AnyOfFilter just(Field field, Object value) {
 		ArrayList<Object> list = new ArrayList<>();
 		list.add(value);
-		return new AnyOfFilter(field, list);
+		return new AnyOfFilter<>(field, list);
 	}
 
 	@Override
+	@SuppressWarnings("SuspiciousMethodCalls")
 	public boolean matches(Record record) {
 		switch (field) {
 			case Band:
@@ -75,7 +76,7 @@ public class AnyOfFilter<T> implements Filter, Collection<T> {
 
 	@NonNull
 	@Override
-	public <T1> T1[] toArray(T1[] a) {
+	public <T1> T1[] toArray(@NonNull T1[] a) {
 		return values.toArray(a);
 	}
 
@@ -90,22 +91,22 @@ public class AnyOfFilter<T> implements Filter, Collection<T> {
 	}
 
 	@Override
-	public boolean containsAll(Collection<?> c) {
+	public boolean containsAll(@NonNull Collection<?> c) {
 		return values.containsAll(c);
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends T> c) {
+	public boolean addAll(@NonNull Collection<? extends T> c) {
 		return values.addAll(c);
 	}
 
 	@Override
-	public boolean removeAll(Collection<?> c) {
+	public boolean removeAll(@NonNull Collection<?> c) {
 		return values.removeAll(c);
 	}
 
 	@Override
-	public boolean retainAll(Collection<?> c) {
+	public boolean retainAll(@NonNull Collection<?> c) {
 		return values.retainAll(c);
 	}
 

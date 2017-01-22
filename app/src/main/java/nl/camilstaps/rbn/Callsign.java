@@ -3,7 +3,7 @@ package nl.camilstaps.rbn;
 import java.io.Serializable;
 
 public final class Callsign implements Serializable {
-	private String callsign;
+	private final String callsign;
 
 	public Callsign (String callsign) {
 		this.callsign = callsign;
@@ -19,8 +19,6 @@ public final class Callsign implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Callsign))
-			return false;
-		return this.callsign == ((Callsign) obj).callsign;
+		return obj instanceof Callsign && this.callsign.equals(((Callsign) obj).callsign);
 	}
 }

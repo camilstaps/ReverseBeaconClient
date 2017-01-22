@@ -10,7 +10,7 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 public class EndDiscardingList<E> implements List<E>, Serializable {
-	private transient Object[] elements;
+	private final transient Object[] elements;
 	private int cursor = 0;
 	private boolean looped = false;
 	private int size = 0;
@@ -31,6 +31,7 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public E get(int index) {
 		return (E) elements[getRealIndex(index)];
 	}
@@ -106,7 +107,7 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 
 	@NonNull
 	@Override
-	public <T> T[] toArray(T[] a) {
+	public <T> T[] toArray(@NonNull T[] a) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -128,12 +129,12 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 	}
 
 	@Override
-	public boolean containsAll(Collection<?> c) {
+	public boolean containsAll(@NonNull Collection<?> c) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends E> c) {
+	public boolean addAll(@NonNull Collection<? extends E> c) {
 		for (E e : c)
 			if (!add(e))
 				return false;
@@ -141,17 +142,17 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 	}
 
 	@Override
-	public boolean addAll(int index, Collection<? extends E> c) {
+	public boolean addAll(int index, @NonNull Collection<? extends E> c) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean removeAll(Collection<?> c) {
+	public boolean removeAll(@NonNull Collection<?> c) {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public boolean retainAll(Collection<?> c) {
+	public boolean retainAll(@NonNull Collection<?> c) {
 		throw new UnsupportedOperationException();
 	}
 

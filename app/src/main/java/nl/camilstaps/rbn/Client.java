@@ -12,25 +12,23 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public final class Client {
-	private final TelnetClient client;
 	private final InputStream inputStream;
 	private final BufferedReader bufferedReader;
-	private final PrintStream outputStream;
 
 	private final Collection<NewRecordListener> listeners = new ArrayList<>();
 
 	public Client(String call, String host, int port) throws IOException {
-		client = new TelnetClient();
+		final TelnetClient client = new TelnetClient();
 		client.setConnectTimeout(2000);
 		client.connect(host, port);
 		client.setKeepAlive(true);
 
 		inputStream = client.getInputStream();
-		outputStream = new PrintStream(client.getOutputStream());
+		final PrintStream printStream = new PrintStream(client.getOutputStream());
 
 		readUntil("Please enter your call:");
-		outputStream.print(call + "\r\n");
-		outputStream.flush();
+		printStream.print(call + "\r\n");
+		printStream.flush();
 		readUntil(">\r\n\r\n");
 
 		bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -54,8 +52,9 @@ public final class Client {
 		}
 	}
 
-	class ClientThread implements Runnable {
+	private class ClientThread implements Runnable {
 		@Override
+		@SuppressWarnings("InfiniteLoopStatement")
 		public void run() {
 			while (true) {
 				try {

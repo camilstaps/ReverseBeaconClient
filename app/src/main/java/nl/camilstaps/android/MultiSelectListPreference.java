@@ -23,14 +23,14 @@ public class MultiSelectListPreference extends android.preference.MultiSelectLis
 		super(context, attrs);
 	}
 
-	public List<String> getCurrentEntries() {
+	protected List<String> getCurrentEntries() {
 		CharSequence[] entries = getEntries();
 		CharSequence[] entryValues = getEntryValues();
 		List<String> currentEntries = new ArrayList<>();
 		Set<String> currentEntryValues = getValues();
 
 		for (int i = 0; i < entries.length; i++)
-			if (currentEntryValues.contains(entryValues[i]))
+			if (currentEntryValues.contains(entryValues[i].toString()))
 				currentEntries.add(entries[i].toString());
 
 		return currentEntries;

@@ -69,7 +69,7 @@ public class CompoundFilter implements Filter, Collection<Filter> {
 
 	@NonNull
 	@Override
-	public <T> T[] toArray(T[] a) {
+	public <T> T[] toArray(@NonNull T[] a) {
 		return filters.toArray(a);
 	}
 
@@ -84,22 +84,22 @@ public class CompoundFilter implements Filter, Collection<Filter> {
 	}
 
 	@Override
-	public boolean containsAll(Collection<?> c) {
+	public boolean containsAll(@NonNull Collection<?> c) {
 		return filters.containsAll(c);
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends Filter> c) {
+	public boolean addAll(@NonNull Collection<? extends Filter> c) {
 		return filters.addAll(c);
 	}
 
 	@Override
-	public boolean removeAll(Collection<?> c) {
+	public boolean removeAll(@NonNull Collection<?> c) {
 		return filters.removeAll(c);
 	}
 
 	@Override
-	public boolean retainAll(Collection<?> c) {
+	public boolean retainAll(@NonNull Collection<?> c) {
 		return filters.retainAll(c);
 	}
 

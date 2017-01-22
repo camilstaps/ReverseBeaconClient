@@ -53,10 +53,7 @@ public class RangeFilter implements Filter {
 				return min <= record.getFrequency() && record.getFrequency() <= max;
 			case Speed:
 				Speed speed = record.getSpeed();
-				if (speed.unit == speedUnit)
-					return min <= speed.value && speed.value <= max;
-				else
-					return true;
+				return speed.unit != speedUnit || min <= speed.value && speed.value <= max;
 			case Strength:
 				return min <= record.getStrength() && record.getStrength() <= max;
 			default:

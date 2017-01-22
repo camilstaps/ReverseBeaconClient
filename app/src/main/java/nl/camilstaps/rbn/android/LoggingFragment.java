@@ -33,7 +33,7 @@ public class LoggingFragment extends Fragment {
 	private Activity activity;
 
 	private RecordArrayAdapter adapter;
-	private EndDiscardingList<Record> records = new EndDiscardingList<>(100);
+	private final EndDiscardingList<Record> records = new EndDiscardingList<>(100);
 
 	@Override
 	public void onAttach(Context context) {
@@ -90,9 +90,9 @@ public class LoggingFragment extends Fragment {
 	}
 
 	private class RecordArrayAdapter extends ArrayAdapter<Record> implements Serializable {
-		private Context context;
+		private final Context context;
 
-		public RecordArrayAdapter(Context context, List<Record> objects) {
+		RecordArrayAdapter(Context context, List<Record> objects) {
 			super(context, -1, objects);
 			this.context = context;
 		}

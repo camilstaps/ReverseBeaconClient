@@ -19,7 +19,8 @@ public enum Country {
 	 * A list of ITU prefixes and ISO 3166 country codes.
 	 * p and c are Paired when p is the first prefix that is *not* part of c's callsign space.
 	 */
-	static Pair<String, Country>[] simplePrefixes = new Pair[] {
+	@SuppressWarnings("unchecked")
+	static final Pair<String, Country>[] simplePrefixes = (Pair<String,Country>[]) new Pair[] {
 			new Pair<>("3",  GB),
 			new Pair<>("3B", MC),
 			new Pair<>("3C", MU),
@@ -394,10 +395,10 @@ public enum Country {
 	}
 
 	private static class Pair<A,B> {
-		A first;
-		B second;
+		final A first;
+		final B second;
 
-		public Pair(A first, B second) {
+		Pair(A first, B second) {
 			this.first = first;
 			this.second = second;
 		}

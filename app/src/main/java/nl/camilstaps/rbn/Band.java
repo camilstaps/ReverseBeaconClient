@@ -3,7 +3,7 @@ package nl.camilstaps.rbn;
 import java.io.Serializable;
 
 public class Band implements Serializable {
-	private float wavelength;
+	private final float wavelength;
 
 	public Band(float wavelength) {
 		this.wavelength = wavelength;
@@ -60,8 +60,6 @@ public class Band implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Band))
-			return false;
-		return wavelength == ((Band) obj).wavelength;
+		return obj instanceof Band && wavelength == ((Band) obj).wavelength;
 	}
 }

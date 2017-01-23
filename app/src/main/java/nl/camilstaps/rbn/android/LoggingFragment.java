@@ -82,13 +82,6 @@ public class LoggingFragment extends Fragment {
 		return view;
 	}
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putSerializable("records", records);
-		outState.putSerializable("adapter", adapter);
-	}
-
 	private class RecordArrayAdapter extends ArrayAdapter<Record> implements Serializable {
 		private final Context context;
 

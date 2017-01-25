@@ -58,8 +58,9 @@ public final class Record implements Serializable {
 			sc.findInLine("DX de ");
 			sc.useDelimiter("-#:");
 			String dx = sc.next();
-			sc.useDelimiter("\\s+");
+			sc.useDelimiter("\\s*(?=\\d)");
 			sc.next("-#:");
+			sc.useDelimiter("\\s+");
 
 			float frequency = sc.nextFloat();
 

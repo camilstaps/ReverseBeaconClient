@@ -7,19 +7,42 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.net.SocketException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public final class Client {
-	private final InputStream inputStream;
-	private final BufferedReader bufferedReader;
+public final class Client implements NewRecordListener {
+	private final TelnetClient client;
+	private InputStream inputStream;
+	private BufferedReader bufferedReader;
+
+	private final String host;
+	private final int port;
+	private final String call;
 
 	private final Collection<NewRecordListener> listeners = new ArrayList<>();
 
+	private boolean alive = false;
+	private final static int RECONNECT_INTERVAL = 1000;
+
 	public Client(String call, String host, int port) throws IOException {
-		final TelnetClient client = new TelnetClient();
+		this.call = call;
+		this.host = host;
+		this.port = port;
+
+		client = new TelnetClient();
 		client.setConnectTimeout(2000);
+
+		connect();
+	}
+
+	public void connect() throws IllegalStateException, IOException {
+		if (alive)
+			throw new IllegalStateException("connect call while connected");
+
 		client.connect(host, port);
 		client.setKeepAlive(true);
 
@@ -30,6 +53,8 @@ public final class Client {
 		printStream.print(call + "\r\n");
 		printStream.flush();
 		readUntil(">\r\n\r\n");
+
+		alive = true;
 
 		bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 		(new Thread(new ClientThread())).start();
@@ -52,13 +77,55 @@ public final class Client {
 		}
 	}
 
+	@Override
+	public void receive(Record record) {
+		for (NewRecordListener listener : listeners)
+			listener.receive(record);
+	}
+
+	@Override
+	public void unparsable(String line, ParseException e) {
+		for (NewRecordListener listener : listeners)
+			listener.unparsable(line, e);
+	}
+
+	@Override
+	public void onDisconnected() {
+		alive = false;
+		for (NewRecordListener listener : listeners)
+			listener.onDisconnected();
+
+		try {
+			final Timer timer = new Timer();
+			timer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					try {
+						connect();
+						onReconnected();
+						timer.cancel();
+					} catch (Exception e) {}
+				}
+			}, 0, RECONNECT_INTERVAL);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void onReconnected() {
+		for (NewRecordListener listener : listeners)
+			listener.onReconnected();
+	}
+
 	private class ClientThread implements Runnable {
 		@Override
-		@SuppressWarnings("InfiniteLoopStatement")
 		public void run() {
-			while (true) {
+			while (alive) {
 				try {
 					processInput();
+				} catch (SocketException e) {
+					onDisconnected();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -67,23 +134,19 @@ public final class Client {
 
 		private void processInput() throws IOException {
 			String line = bufferedReader.readLine();
+
+			if (line == null) {
+				onDisconnected();
+				return;
+			}
+
 			try {
-				Record record = Record.factory(line);
-				for (NewRecordListener listener : listeners)
-					listener.receive(record);
+				receive(Record.factory(line));
 			} catch (ParseException e) {
-				for (NewRecordListener listener : listeners)
-					listener.unparsable(line, e);
+				unparsable(line, e);
 				e.printStackTrace();
 				System.err.println(line);
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
-	}
-
-	public interface NewRecordListener {
-		void receive(Record record);
-		void unparsable(String line, ParseException e);
 	}
 }

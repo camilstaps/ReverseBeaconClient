@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import nl.camilstaps.rbn.Band;
 import nl.camilstaps.rbn.Client;
+import nl.camilstaps.rbn.NewRecordListener;
 import nl.camilstaps.rbn.R;
 import nl.camilstaps.rbn.Record;
 import nl.camilstaps.rbn.Speed;
@@ -69,7 +70,7 @@ public final class RBNApplication extends Application {
 		toast.show();
 	}
 
-	public void registerClientListener(final Client.NewRecordListener listener) {
+	public void registerClientListener(final NewRecordListener listener) {
 		if (client == null) {
 			quickToast("Connecting...");
 

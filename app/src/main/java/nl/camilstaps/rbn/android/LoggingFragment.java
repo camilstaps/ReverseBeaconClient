@@ -24,7 +24,7 @@ import java.util.TimeZone;
 import nl.camilstaps.android.Util;
 import nl.camilstaps.list.EndDiscardingList;
 import nl.camilstaps.rbn.Band;
-import nl.camilstaps.rbn.Client;
+import nl.camilstaps.rbn.NewRecordListener;
 import nl.camilstaps.rbn.R;
 import nl.camilstaps.rbn.Record;
 import nl.camilstaps.rbn.filter.Filter;
@@ -51,7 +51,8 @@ public class LoggingFragment extends Fragment {
 	private void registerLogger() {
 		final Filter filter = ((RBNApplication) getActivity().getApplication()).getMainFilter();
 
-		((RBNApplication) activity.getApplication()).registerClientListener(new Client.NewRecordListener() {
+		((RBNApplication) activity.getApplication()).registerClientListener(
+				new NewRecordListener() {
 			@Override
 			public void receive(final Record record) {
 				if (filter.matches(record)) {
@@ -67,7 +68,22 @@ public class LoggingFragment extends Fragment {
 
 			@Override
 			public void unparsable(String line, ParseException e) {
-				((RBNApplication) getActivity().getApplication()).quickToast(e.toString() + ":\n" + line);
+				feedback(line, e);
+			}
+
+			@Override
+			public void onDisconnected() {
+				feedback("Lost connection to RBN", null);
+			}
+
+			@Override
+			public void onReconnected() {
+				feedback("Reconnected to RBN", null);
+			}
+
+			private void feedback(String extra, Exception e) {
+				((RBNApplication) getActivity().getApplication())
+						.quickToast((e != null ? e.toString() + ":\n" : "") + extra);
 			}
 		});
 	}

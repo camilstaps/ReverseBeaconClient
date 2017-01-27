@@ -24,6 +24,7 @@ public final class Entry implements Serializable {
 
 	public final static float MAX_MERGE_DIFFERENCE_FREQUENCY = 0.5f;
 	public final static int MAX_MERGE_DIFFERENCE_SPEED = 2;
+	public final static int MAX_MERGE_DIFFERENCE_SECONDS = 30;
 
 	public Entry(Callsign dx, Callsign de, float frequency, Mode mode, int strength, Speed speed,
 				 Type type, Date date) {
@@ -100,6 +101,8 @@ public final class Entry implements Serializable {
 		if (!de.equals(entry.de)
 				|| !mode.equals(entry.mode)
 				|| !type.equals(entry.type)
+				|| Math.abs(getLastDate().getTime() - entry.getLastDate().getTime())
+						> MAX_MERGE_DIFFERENCE_SECONDS * 1000
 				|| Math.abs(getAvgFrequency() - entry.getAvgFrequency())
 						> MAX_MERGE_DIFFERENCE_FREQUENCY
 				|| Math.abs(getAvgSpeed().value - entry.getAvgSpeed().value)

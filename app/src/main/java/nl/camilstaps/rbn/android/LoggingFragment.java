@@ -65,10 +65,10 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 				if (filter.matches(entry)) {
 					activity.runOnUiThread(new Runnable() {
 						@Override
-						public synchronized void run() {
+						public void run() {
 							boolean addNew = true;
 							int bumpIndex = 0;
-							for (Entry otherEntry : entries) {
+							for (Entry otherEntry : entries) synchronized (entries) {
 								if (otherEntry.attemptMerge(entry)) {
 									addNew = false;
 									break;

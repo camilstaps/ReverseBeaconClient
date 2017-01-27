@@ -18,5 +18,5 @@ gen/
 proguard/
 *.log
 
-
 flags
+app/src/main/res/drawable-*/flag_*.png

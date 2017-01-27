@@ -31,11 +31,12 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 			return index;
 	}
 
-	public void bumpToEnd(int index) {
+	public synchronized void bumpToEnd(int index) {
 		E temp = get(index);
-		for (int i = getRealIndex(index); i != cursor - 1; i = (i + 1) % maxLength)
+		int end = (cursor - 1 + maxLength) % maxLength;
+		for (int i = getRealIndex(index); i != end; i = (i + 1) % maxLength)
 			elements[i] = elements[(i+1) % maxLength];
-		elements[(cursor - 1 + maxLength) % maxLength] = temp;
+		elements[end] = temp;
 	}
 
 	@Override
@@ -45,7 +46,7 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 	}
 
 	@Override
-	public E set(int index, E element) {
+	public synchronized E set(int index, E element) {
 		E prev = get(index);
 		elements[getRealIndex(index)] = element;
 		return prev;
@@ -122,7 +123,7 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 	}
 
 	@Override
-	public boolean add(E e) {
+	public synchronized boolean add(E e) {
 		elements[cursor] = e;
 		size = Math.min(size + 1, maxLength);
 		cursor++;
@@ -144,7 +145,7 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 	}
 
 	@Override
-	public boolean addAll(@NonNull Collection<? extends E> c) {
+	public synchronized boolean addAll(@NonNull Collection<? extends E> c) {
 		for (E e : c)
 			if (!add(e))
 				return false;
@@ -174,8 +175,8 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 	}
 
 	private class Itr implements Iterator<E> {
-		private int index = getRealIndex(0);
-		private int expectedSize = size;
+		private int index = 0;
+		private int expectedCursor = cursor;
 
 		@Override
 		public boolean hasNext() {
@@ -184,9 +185,9 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 
 		@Override
 		public E next() {
-			if (size != expectedSize)
+			if (cursor != expectedCursor)
 				throw new ConcurrentModificationException();
-			if (index > size())
+			if (index >= size())
 				throw new NoSuchElementException();
 			return get(index++);
 		}

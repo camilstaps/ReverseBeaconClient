@@ -1,8 +1,6 @@
 package nl.camilstaps.rbn;
 
-import java.io.Serializable;
-
-public class Band implements Serializable {
+public class Band {
 	private final float wavelength;
 
 	public Band(float wavelength) {

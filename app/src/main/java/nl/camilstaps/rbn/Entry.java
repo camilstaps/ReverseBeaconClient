@@ -26,6 +26,8 @@ public final class Entry implements Serializable {
 	public final static int MAX_MERGE_DIFFERENCE_SPEED = 2;
 	public final static int MAX_MERGE_DIFFERENCE_SECONDS = 60;
 
+	private OnRecordAddedListener onRecordAddedListener;
+
 	public Entry(Callsign dx, Callsign de, float frequency, Mode mode, int strength, Speed speed,
 				 Type type, Date date) {
 		this.de = de;
@@ -110,9 +112,23 @@ public final class Entry implements Serializable {
 			return false;
 
 		for (Record record : entry.records)
-			records.add(record);
+			addRecord(record);
 
 		return true;
+	}
+
+	public void addRecord(Record record) {
+		records.add(record);
+		if (onRecordAddedListener != null)
+			onRecordAddedListener.onRecordAdded(record);
+	}
+
+	public void setOnRecordAddedListener(OnRecordAddedListener listener) {
+		onRecordAddedListener = listener;
+	}
+
+	public void unsetOnRecordAddedListener() {
+		onRecordAddedListener = null;
 	}
 
 	@NonNull
@@ -134,6 +150,10 @@ public final class Entry implements Serializable {
 
 	public List<Record> getRecords() {
 		return records;
+	}
+
+	public Speed.SpeedUnit getSpeedUnit() {
+		return speedUnit;
 	}
 
 	public float getAvgFrequency() {
@@ -204,5 +224,9 @@ public final class Entry implements Serializable {
 
 	public enum Type implements Serializable {
 		BEACON, CQ, DX, NCDXF, NCDXFB
+	}
+
+	public interface OnRecordAddedListener {
+		void onRecordAdded(Record record);
 	}
 }

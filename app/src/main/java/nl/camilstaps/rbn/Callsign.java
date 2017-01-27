@@ -1,8 +1,6 @@
 package nl.camilstaps.rbn;
 
-import java.io.Serializable;
-
-public final class Callsign implements Serializable {
+public final class Callsign {
 	private final String callsign;
 
 	public Callsign (String callsign) {

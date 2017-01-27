@@ -2,98 +2,32 @@
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="fill_parent"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:padding="6dip">
 
 	<ImageView
-		android:id="@+id/record_item_flag"
-		android:layout_width="30dip"
-		android:layout_height="30dip"
+		android:id="@+id/flag"
+		android:layout_width="36dp"
+		android:layout_height="27dp"
+		android:layout_gravity="center_vertical"
 		android:contentDescription="@string/flag_content_description"/>
 
-	<LinearLayout
-		android:id="@+id/record_item_rightblock"
-		android:layout_width="wrap_content"
+	<GridLayout
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:layout_toRightOf="@id/flag"
 		android:layout_alignParentRight="true"
-		android:layout_alignParentEnd="true"
-		android:orientation="vertical"
-		android:gravity="center_vertical">
-
-		<ImageView
-			android:id="@+id/record_item_band_icon"
-			android:layout_width="8dip"
-			android:layout_height="8dip"
-			android:layout_marginBottom="2dp"
-			android:src="@drawable/circle"
-			android:layout_gravity="center"
-			android:contentDescription="@string/band_icon_content_description"/>
-
-		<TextView
-			android:id="@+id/record_item_band_text"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textSize="12sp"
-			android:layout_gravity="center"/>
-
-		<TextView
-			android:id="@+id/record_item_mode"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textSize="12sp"
-			android:layout_gravity="center"/>
-
-	</LinearLayout>
-
-	<LinearLayout
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:orientation="vertical"
-		android:layout_toRightOf="@id/record_item_flag"
-		android:layout_toLeftOf="@id/record_item_rightblock"
-		android:layout_marginRight="5dip"
-		android:layout_marginLeft="6dip"
+		android:layout_marginLeft="4dp"
+		android:columnCount="2"
 		tools:ignore="RtlHardcoded">
 
-		<RelativeLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+		<TextView android:id="@+id/callsign" android:layout_columnWeight="3"/>
+		<TextView android:id="@+id/strength" android:layout_columnWeight="1"/>
+		<TextView android:id="@+id/main_info" android:layout_columnWeight="3"/>
+		<TextView android:id="@+id/timestamp" android:layout_columnWeight="1"/>
 
-			<TextView
-				android:id="@+id/record_item_callsign"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textSize="20sp"/>
-
-			<TextView
-				android:id="@+id/record_item_frequency"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_alignParentRight="true"
-				android:textSize="20sp"
-				tools:ignore="RelativeOverlap,RtlHardcoded"/>
-
-		</RelativeLayout>
-
-		<RelativeLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
-
-			<TextView
-				android:id="@+id/record_item_description"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"/>
-
-			<TextView
-				android:id="@+id/record_item_time"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_alignParentRight="true"
-				tools:ignore="RelativeOverlap,RtlHardcoded"/>
-
-		</RelativeLayout>
-
-	</LinearLayout>
+	</GridLayout>
 
 </RelativeLayout>

@@ -8,8 +8,10 @@ import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,7 +22,6 @@ import nl.camilstaps.rbn.R;
 
 public class MainActivity extends AppCompatActivity {
 	private DrawerLayout drawer;
-	private ListView drawerList;
 
 	private boolean openedWelcome = false;
 
@@ -41,9 +42,8 @@ public class MainActivity extends AppCompatActivity {
 
 			String[] titles = getResources().getStringArray(R.array.side_nav_titles);
 			drawer = (DrawerLayout) findViewById(R.id.activity_main_drawer);
-			drawerList = (ListView) findViewById(R.id.activity_main_drawer_list);
-			drawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, titles));
-			drawerList.setOnItemClickListener(new DrawerItemClickListener());
+			NavigationView navigationView = (NavigationView) findViewById(R.id.activity_main_drawer_navigation);
+			navigationView.setNavigationItemSelectedListener(new DrawerItemClickListener());
 
 			FragmentManager fm = getFragmentManager();
 			Fragment loggingFragment = fm.findFragmentByTag("log");
@@ -82,43 +82,51 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	private class DrawerItemClickListener implements ListView.OnItemClickListener {
+	private class DrawerItemClickListener implements NavigationView.OnNavigationItemSelectedListener {
 		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			selectDrawerItem(position);
-		}
-	}
+		public boolean onNavigationItemSelected(MenuItem menuItem) {
+			FragmentManager fm = getFragmentManager();
+			boolean add = false;
 
-	private void selectDrawerItem(int position) {
-		FragmentManager fm = getFragmentManager();
-		String[] tags = new String[] {"log", "filter", "pref"};
-		boolean add = false;
-		Fragment fragment = fm.findFragmentByTag(tags[position]);
-
-		if (fragment == null) {
-			switch (position) {
-				case 0: fragment = new LoggingFragment(); break;
-				case 1: fragment = new FilterFragment(); break;
-				case 2: fragment = new SettingsFragment(); break;
+			String tag;
+			switch (menuItem.getItemId()) {
+				case R.id.drawer_log:      tag = "log"; break;
+				case R.id.drawer_filters:  tag = "filters"; break;
+				case R.id.drawer_settings: tag = "settings"; break;
+				case R.id.drawer_info:     tag = "info"; break;
+				default: throw new RuntimeException();
 			}
-			add = true;
+
+			Fragment fragment = fm.findFragmentByTag(tag);
+
+			if (fragment == null) {
+				switch (menuItem.getItemId()) {
+					case R.id.drawer_log:      fragment = new LoggingFragment(); break;
+					case R.id.drawer_filters:  fragment = new FilterFragment(); break;
+					case R.id.drawer_settings: fragment = new SettingsFragment(); break;
+					case R.id.drawer_info:     fragment = new InfoFragment(); break;
+				}
+				add = true;
+			}
+
+			FragmentTransaction ft = fm.beginTransaction();
+
+			for (String t : new String[] {"log", "filters", "settings", "info"}) {
+				Fragment frag = fm.findFragmentByTag(t);
+				if (frag != null && frag != fragment && !frag.isHidden())
+					ft.hide(frag);
+			}
+
+			if (add)
+				ft.add(R.id.activity_main_content, fragment, tag);
+			else
+				ft.show(fragment);
+
+			ft.addToBackStack(null).commit();
+
+			drawer.closeDrawers();
+
+			return true;
 		}
-
-		FragmentTransaction ft = fm.beginTransaction();
-
-		for (String tag : tags) {
-			Fragment frag = fm.findFragmentByTag(tag);
-			if (frag != null && frag != fragment && !frag.isHidden())
-				ft.hide(frag);
-		}
-
-		if (add)
-			ft.add(R.id.activity_main_content, fragment, tags[position]);
-		else
-			ft.show(fragment);
-
-		ft.addToBackStack(null).commit();
-
-		drawer.closeDrawer(drawerList);
 	}
 }

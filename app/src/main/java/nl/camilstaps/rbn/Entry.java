@@ -24,7 +24,7 @@ public final class Entry implements Serializable {
 
 	public final static float MAX_MERGE_DIFFERENCE_FREQUENCY = 0.5f;
 	public final static int MAX_MERGE_DIFFERENCE_SPEED = 2;
-	public final static int MAX_MERGE_DIFFERENCE_SECONDS = 30;
+	public final static int MAX_MERGE_DIFFERENCE_SECONDS = 60;
 
 	public Entry(Callsign dx, Callsign de, float frequency, Mode mode, int strength, Speed speed,
 				 Type type, Date date) {

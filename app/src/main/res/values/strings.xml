@@ -1,5 +1,5 @@
 <resources>
-	<string name="app_name">ReverseBeaconClient</string>
+	<string name="app_name">Reverse Beacon Client</string>
 
 	<string name="flag_content_description">Country flag</string>
 	<string name="band_icon_content_description"/>
@@ -8,16 +8,19 @@
 	<string name="maximum">Max</string>
 
 	<string name="title_activity_settings">Settings</string>
-	<string name="pref_connection">Connection</string>
+
+	<string name="pref_general">General</string>
+	<string name="pref_callsign">Callsign</string>
+	<string name="pref_callsign_summ">Your callsign (to \'login\' at the RBN)</string>
+	<string name="pref_callsign_default" translatable="false"/>
+
+	<string name="pref_advanced">Advanced</string>
 	<string name="pref_host">RBN host</string>
 	<string name="pref_host_summ">The telnet host to connect to</string>
 	<string name="pref_host_default" translatable="false">telnet.reversebeacon.net</string>
 	<string name="pref_port">RBN port</string>
 	<string name="pref_port_summ">The port of the telnet host</string>
 	<string name="pref_port_default" translatable="false">7000</string>
-	<string name="pref_callsign">Callsign</string>
-	<string name="pref_callsign_summ">Your callsign (to \'login\' at the RBN)</string>
-	<string name="pref_callsign_default" translatable="false"/>
 
 	<string-array name="side_nav_titles">
 		<item>List</item>

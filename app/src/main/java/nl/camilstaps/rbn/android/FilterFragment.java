@@ -7,8 +7,8 @@ import android.preference.PreferenceFragment;
 import nl.camilstaps.android.MultiSelectListPreference;
 import nl.camilstaps.android.RangePreference;
 import nl.camilstaps.rbn.Band;
-import nl.camilstaps.rbn.R;
 import nl.camilstaps.rbn.Entry;
+import nl.camilstaps.rbn.R;
 import nl.camilstaps.rbn.filter.AnyOfFilter;
 import nl.camilstaps.rbn.filter.RangeFilter;
 

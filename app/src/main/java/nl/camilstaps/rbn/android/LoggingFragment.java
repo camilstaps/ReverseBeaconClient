@@ -35,6 +35,8 @@ public class LoggingFragment extends Fragment {
 	private RecordArrayAdapter adapter;
 	private final EndDiscardingList<Entry> entries = new EndDiscardingList<>(100);
 
+	private boolean isRegistered = false;
+
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
@@ -44,8 +46,11 @@ public class LoggingFragment extends Fragment {
 		if (activity == null)
 			activity = getActivity();
 
-		adapter = new RecordArrayAdapter(activity, entries);
-		registerLogger();
+		if (!isRegistered) {
+			adapter = new RecordArrayAdapter(activity, entries);
+			registerLogger();
+			isRegistered = true;
+		}
 	}
 
 	private void registerLogger() {

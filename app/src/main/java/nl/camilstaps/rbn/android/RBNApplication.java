@@ -10,9 +10,9 @@ import android.widget.Toast;
 
 import nl.camilstaps.rbn.Band;
 import nl.camilstaps.rbn.Client;
+import nl.camilstaps.rbn.Entry;
 import nl.camilstaps.rbn.NewRecordListener;
 import nl.camilstaps.rbn.R;
-import nl.camilstaps.rbn.Entry;
 import nl.camilstaps.rbn.Speed;
 import nl.camilstaps.rbn.filter.AnyOfFilter;
 import nl.camilstaps.rbn.filter.CompoundFilter;

@@ -24,16 +24,16 @@ import java.util.TimeZone;
 import nl.camilstaps.android.Util;
 import nl.camilstaps.list.EndDiscardingList;
 import nl.camilstaps.rbn.Band;
+import nl.camilstaps.rbn.Entry;
 import nl.camilstaps.rbn.NewRecordListener;
 import nl.camilstaps.rbn.R;
-import nl.camilstaps.rbn.Record;
 import nl.camilstaps.rbn.filter.Filter;
 
 public class LoggingFragment extends Fragment {
 	private Activity activity;
 
 	private RecordArrayAdapter adapter;
-	private final EndDiscardingList<Record> records = new EndDiscardingList<>(100);
+	private final EndDiscardingList<Entry> entries = new EndDiscardingList<>(100);
 
 	@Override
 	public void onAttach(Context context) {
@@ -44,7 +44,7 @@ public class LoggingFragment extends Fragment {
 		if (activity == null)
 			activity = getActivity();
 
-		adapter = new RecordArrayAdapter(activity, records);
+		adapter = new RecordArrayAdapter(activity, entries);
 		registerLogger();
 	}
 
@@ -54,12 +54,26 @@ public class LoggingFragment extends Fragment {
 		((RBNApplication) activity.getApplication()).registerClientListener(
 				new NewRecordListener() {
 			@Override
-			public void receive(final Record record) {
-				if (filter.matches(record)) {
+			public void receive(final Entry entry) {
+				if (filter.matches(entry)) {
 					activity.runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							records.add(record);
+							boolean addNew = true;
+							int bumpIndex = 0;
+							for (Entry otherEntry : entries) {
+								if (otherEntry.attemptMerge(entry)) {
+									addNew = false;
+									break;
+								}
+								bumpIndex++;
+							}
+
+							if (addNew)
+								entries.add(entry);
+							else
+								entries.bumpToEnd(bumpIndex);
+
 							adapter.notifyDataSetChanged();
 						}
 					});
@@ -98,10 +112,10 @@ public class LoggingFragment extends Fragment {
 		return view;
 	}
 
-	private class RecordArrayAdapter extends ArrayAdapter<Record> implements Serializable {
+	private class RecordArrayAdapter extends ArrayAdapter<Entry> implements Serializable {
 		private final Context context;
 
-		RecordArrayAdapter(Context context, List<Record> objects) {
+		RecordArrayAdapter(Context context, List<Entry> objects) {
 			super(context, -1, objects);
 			this.context = context;
 		}
@@ -132,7 +146,7 @@ public class LoggingFragment extends Fragment {
 				holder = (RecordItemViewHolder) view.getTag();
 			}
 
-			Record r = getItem(position);
+			Entry r = getItem(position);
 
 			try {
 				holder.flag.setImageResource(activity.getResources().getIdentifier(
@@ -142,23 +156,38 @@ public class LoggingFragment extends Fragment {
 				e.printStackTrace();
 			}
 			holder.callsign.setText(r.getDe().toString());
-			holder.frequency.setText(String.format("%.2f", r.getFrequency()));
+			holder.frequency.setText(String.format("%.1f", r.getAvgFrequency()));
 			holder.band.setText(r.getBand().toString());
 			holder.bandIcon.setColorFilter(bandToColour(r.getBand()), PorterDuff.Mode.SRC);
 			holder.mode.setText(r.getMode().toString());
 
-			holder.description.setText(Util.fromHtml(r.getStrength() + "dB de " + r.getDx() +
-					" &#8226; " + r.getSpeed() + " &#8226; " + r.getType()));
+			List<Entry.Record> records = r.getRecords();
+			int recordsCount = records.size();
+			Entry.Record firstRecord = records.get(0);
+
+			int mindB = r.getMinStrength();
+			int maxdB = r.getMaxStrength();
+
+			holder.description.setText(Util.fromHtml(
+					(mindB == maxdB ? mindB : mindB + "-" + maxdB) + "dB " +
+					(recordsCount == 1 ? "de " + firstRecord.dx : "(" + recordsCount + "x)") +
+					" &#8226; " + r.getAvgSpeed() + " &#8226; " + r.getType()));
 
 			DateFormat df = new SimpleDateFormat("HH:mm'Z'");
 			df.setTimeZone(TimeZone.getTimeZone("Zulu"));
-			holder.time.setText(df.format(r.getDate()));
+
+			if (recordsCount == 1 ||
+					r.getFirstDate().getTime() / 60000 == r.getLastDate().getTime() / 60000)
+				holder.time.setText(df.format(firstRecord.date));
+			else
+				holder.time.setText(
+						df.format(r.getFirstDate()) + " - " + df.format(r.getLastDate()));
 
 			return view;
 		}
 
 		@Override
-		public Record getItem(int position) {
+		public Entry getItem(int position) {
 			return super.getItem(getCount() - position - 1);
 		}
 

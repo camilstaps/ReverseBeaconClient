@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -30,6 +31,13 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 			return index;
 	}
 
+	public void bumpToEnd(int index) {
+		E temp = get(index);
+		for (int i = getRealIndex(index); i < cursor - 1; i = (i + 1) % maxLength)
+			elements[i] = elements[(i+1) % maxLength];
+		elements[cursor-1] = temp;
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public E get(int index) {
@@ -38,7 +46,9 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 
 	@Override
 	public E set(int index, E element) {
-		throw new UnsupportedOperationException();
+		E prev = get(index);
+		elements[getRealIndex(index)] = element;
+		return prev;
 	}
 
 	@Override
@@ -96,7 +106,7 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 	@NonNull
 	@Override
 	public Iterator<E> iterator() {
-		throw new UnsupportedOperationException();
+		return new Itr();
 	}
 
 	@NonNull
@@ -161,5 +171,24 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 		cursor = 0;
 		size = 0;
 		looped = false;
+	}
+
+	private class Itr implements Iterator<E> {
+		private int index = getRealIndex(0);
+		private int expectedSize = size;
+
+		@Override
+		public boolean hasNext() {
+			return index < size();
+		}
+
+		@Override
+		public E next() {
+			if (size != expectedSize)
+				throw new ConcurrentModificationException();
+			if (index > size())
+				throw new NoSuchElementException();
+			return get(index++);
+		}
 	}
 }

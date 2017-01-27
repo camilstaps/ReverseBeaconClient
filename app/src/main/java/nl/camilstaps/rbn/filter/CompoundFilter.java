@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import nl.camilstaps.rbn.Record;
+import nl.camilstaps.rbn.Entry;
 
 public class CompoundFilter implements Filter, Collection<Filter> {
 	private final List<Filter> filters;
@@ -23,16 +23,16 @@ public class CompoundFilter implements Filter, Collection<Filter> {
 	}
 
 	@Override
-	public boolean matches(Record record) {
+	public boolean matches(Entry entry) {
 		switch (method) {
 			case And:
 				for (Filter filter : filters)
-					if (!filter.matches(record))
+					if (!filter.matches(entry))
 						return false;
 				return true;
 			case Or:
 				for (Filter filter : filters)
-					if (filter.matches(record))
+					if (filter.matches(entry))
 						return true;
 				return false;
 			default:

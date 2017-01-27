@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import nl.camilstaps.rbn.Record;
+import nl.camilstaps.rbn.Entry;
 
 public class AnyOfFilter<T> implements Filter, Collection<T> {
 	private final List<T> values;
@@ -30,18 +30,21 @@ public class AnyOfFilter<T> implements Filter, Collection<T> {
 
 	@Override
 	@SuppressWarnings("SuspiciousMethodCalls")
-	public boolean matches(Record record) {
+	public boolean matches(Entry entry) {
 		switch (field) {
 			case Band:
-				return values.contains(record.getBand());
+				return values.contains(entry.getBand());
 			case Mode:
-				return values.contains(record.getMode());
+				return values.contains(entry.getMode());
 			case Type:
-				return values.contains(record.getType());
+				return values.contains(entry.getType());
 			case Dx:
-				return values.contains(record.getDx());
+				for (Entry.Record record : entry.getRecords())
+					if (values.contains(record.dx))
+						return true;
+				return false;
 			case De:
-				return values.contains(record.getDe());
+				return values.contains(entry.getDe());
 			default:
 				throw new IllegalArgumentException("Invalid field " + field + " for AnyOfFilter.");
 		}

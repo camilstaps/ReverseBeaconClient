@@ -1,6 +1,6 @@
 package nl.camilstaps.rbn.filter;
 
-import nl.camilstaps.rbn.Record;
+import nl.camilstaps.rbn.Entry;
 import nl.camilstaps.rbn.Speed;
 
 public class RangeFilter implements Filter {
@@ -44,18 +44,19 @@ public class RangeFilter implements Filter {
 	}
 
 	@Override
-	public boolean matches(Record record) {
+	public boolean matches(Entry entry) {
 		switch (field) {
 			case Band:
-				float wavelength = record.getBand().getWavelength();
+				float wavelength = entry.getBand().getWavelength();
 				return min <= wavelength && wavelength <= max;
 			case Frequency:
-				return min <= record.getFrequency() && record.getFrequency() <= max;
+				float frequency = entry.getAvgFrequency();
+				return min <= frequency && frequency <= max;
 			case Speed:
-				Speed speed = record.getSpeed();
+				Speed speed = entry.getAvgSpeed();
 				return speed.unit != speedUnit || min <= speed.value && speed.value <= max;
 			case Strength:
-				return min <= record.getStrength() && record.getStrength() <= max;
+				return min <= entry.getMaxStrength() && entry.getMinStrength() <= max;
 			default:
 				return false;
 		}

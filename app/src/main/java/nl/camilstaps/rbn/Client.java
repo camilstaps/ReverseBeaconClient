@@ -78,9 +78,9 @@ public final class Client implements NewRecordListener {
 	}
 
 	@Override
-	public void receive(Record record) {
+	public void receive(Entry entry) {
 		for (NewRecordListener listener : listeners)
-			listener.receive(record);
+			listener.receive(entry);
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public final class Client implements NewRecordListener {
 			}
 
 			try {
-				receive(Record.factory(line));
+				receive(Entry.factory(line));
 			} catch (ParseException e) {
 				unparsable(line, e);
 				e.printStackTrace();

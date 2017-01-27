@@ -1,9 +1,9 @@
 package nl.camilstaps.rbn.filter;
 
-import nl.camilstaps.rbn.Record;
+import nl.camilstaps.rbn.Entry;
 
 public interface Filter {
-	boolean matches(Record record);
+	boolean matches(Entry entry);
 
 	enum Field {
 		Dx, De, Band, Mode, Type, Frequency, Speed, Strength

@@ -8,7 +8,7 @@ import nl.camilstaps.android.MultiSelectListPreference;
 import nl.camilstaps.android.RangePreference;
 import nl.camilstaps.rbn.Band;
 import nl.camilstaps.rbn.R;
-import nl.camilstaps.rbn.Record;
+import nl.camilstaps.rbn.Entry;
 import nl.camilstaps.rbn.filter.AnyOfFilter;
 import nl.camilstaps.rbn.filter.RangeFilter;
 
@@ -61,18 +61,18 @@ public class FilterFragment extends PreferenceFragment
 			case RBNApplication.PREF_FILTER_MODE: {
 				MultiSelectListPreference pref = (MultiSelectListPreference) findPreference(key);
 				pref.setSummaryLikeEntries();
-				AnyOfFilter<Record.Mode> filter = app.getModeFilter();
+				AnyOfFilter<Entry.Mode> filter = app.getModeFilter();
 				filter.clear();
 				for (String mode : pref.getValues())
-					filter.add(Record.Mode.valueOf(mode));
+					filter.add(Entry.Mode.valueOf(mode));
 				break; }
 			case RBNApplication.PREF_FILTER_TYPE: {
 				MultiSelectListPreference pref = (MultiSelectListPreference) findPreference(key);
 				pref.setSummaryLikeEntries();
-				AnyOfFilter<Record.Type> filter = app.getTypeFilter();
+				AnyOfFilter<Entry.Type> filter = app.getTypeFilter();
 				filter.clear();
 				for (String type : pref.getValues())
-					filter.add(Record.Type.valueOf(type));
+					filter.add(Entry.Type.valueOf(type));
 				break; }
 			case RBNApplication.PREF_FILTER_SPEED_MIN:
 			case RBNApplication.PREF_FILTER_SPEED_MAX: {

@@ -12,7 +12,7 @@ import nl.camilstaps.rbn.Band;
 import nl.camilstaps.rbn.Client;
 import nl.camilstaps.rbn.NewRecordListener;
 import nl.camilstaps.rbn.R;
-import nl.camilstaps.rbn.Record;
+import nl.camilstaps.rbn.Entry;
 import nl.camilstaps.rbn.Speed;
 import nl.camilstaps.rbn.filter.AnyOfFilter;
 import nl.camilstaps.rbn.filter.CompoundFilter;
@@ -34,8 +34,8 @@ public final class RBNApplication extends Application {
 
 	final CompoundFilter compoundFilter = new CompoundFilter(CompoundFilter.Method.And);
 	final AnyOfFilter<Band> bandFilter = new AnyOfFilter<>(Filter.Field.Band);
-	final AnyOfFilter<Record.Mode> modeFilter = new AnyOfFilter<>(Filter.Field.Mode);
-	final AnyOfFilter<Record.Type> typeFilter = new AnyOfFilter<>(Filter.Field.Type);
+	final AnyOfFilter<Entry.Mode> modeFilter = new AnyOfFilter<>(Filter.Field.Mode);
+	final AnyOfFilter<Entry.Type> typeFilter = new AnyOfFilter<>(Filter.Field.Type);
 	RangeFilter speedFilter;
 
 	@Override
@@ -54,9 +54,9 @@ public final class RBNApplication extends Application {
 		for (String band : prefs.getStringSet(PREF_FILTER_BAND, new ArraySet<String>()))
 			bandFilter.add(new Band(Float.valueOf(band) / 100));
 		for (String mode : prefs.getStringSet(PREF_FILTER_MODE, new ArraySet<String>()))
-			modeFilter.add(Record.Mode.valueOf(mode));
+			modeFilter.add(Entry.Mode.valueOf(mode));
 		for (String type : prefs.getStringSet(PREF_FILTER_TYPE, new ArraySet<String>()))
-			typeFilter.add(Record.Type.valueOf(type));
+			typeFilter.add(Entry.Type.valueOf(type));
 		speedFilter.setRange(
 				prefs.getFloat(PREF_FILTER_SPEED + "_min", 0),
 				prefs.getFloat(PREF_FILTER_SPEED + "_max", 50));
@@ -114,11 +114,11 @@ public final class RBNApplication extends Application {
 		return bandFilter;
 	}
 
-	public AnyOfFilter<Record.Mode> getModeFilter() {
+	public AnyOfFilter<Entry.Mode> getModeFilter() {
 		return modeFilter;
 	}
 
-	public AnyOfFilter<Record.Type> getTypeFilter() {
+	public AnyOfFilter<Entry.Type> getTypeFilter() {
 		return typeFilter;
 	}
 

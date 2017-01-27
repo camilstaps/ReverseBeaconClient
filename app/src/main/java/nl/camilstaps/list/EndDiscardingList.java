@@ -35,7 +35,7 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 		E temp = get(index);
 		for (int i = getRealIndex(index); i < cursor - 1; i = (i + 1) % maxLength)
 			elements[i] = elements[(i+1) % maxLength];
-		elements[cursor-1] = temp;
+		elements[(cursor - 1 + maxLength) % maxLength] = temp;
 	}
 
 	@Override

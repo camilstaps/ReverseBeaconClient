@@ -1,6 +1,18 @@
 <resources>
 	<string name="app_name">Reverse Beacon Client</string>
 
+	<string name="text_welcome">Welcome to the Reverse Beacon Client app.
+		The Reverse Beacon Network requires that you enter a callsign to connect to their telnet servers.
+		Please enter your callsign here:
+	</string>
+	<string name="text_welcome_below">For more information about the reverse beacon network, see <a href="http://reversebeacon.net">http://reversebeacon.net</a>.
+		The source code for this app is on GitHub: <a href="https://github.com/camilstaps/ReverseBeaconClient">https://github.com/camilstaps/ReverseBeaconClient</a>.
+	</string>
+	<string name="welcome_callsign_hint">PD7LOL</string>
+	<string name="welcome_button_text">Start</string>
+
+	<string name="warning_invalid_callsign">"%s" is not a valid callsign</string>
+
 	<string name="flag_content_description">Country flag</string>
 	<string name="band_icon_content_description"/>
 

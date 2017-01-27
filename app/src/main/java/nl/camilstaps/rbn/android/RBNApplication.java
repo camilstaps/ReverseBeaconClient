@@ -20,6 +20,9 @@ import nl.camilstaps.rbn.filter.Filter;
 import nl.camilstaps.rbn.filter.RangeFilter;
 
 public final class RBNApplication extends Application {
+	public static final String PREF_CALLSIGN = "callsign";
+	public static final String PREF_HOST = "host";
+	public static final String PREF_PORT = "port";
 	public static final String PREF_FILTER_BAND = "filter_band";
 	public static final String PREF_FILTER_MODE = "filter_mode";
 	public static final String PREF_FILTER_TYPE = "filter_type";
@@ -78,12 +81,16 @@ public final class RBNApplication extends Application {
 				@Override
 				protected Void doInBackground(Void... x) {
 					try {
-						SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+						SharedPreferences prefs = PreferenceManager
+								.getDefaultSharedPreferences(getApplicationContext());
 						Resources ress = getApplicationContext().getResources();
 						client = new Client(
-								prefs.getString("callsign", ress.getString(R.string.pref_callsign_default)),
-								prefs.getString("host", ress.getString(R.string.pref_host_default)),
-								Integer.valueOf(prefs.getString("port", ress.getString(R.string.pref_port_default))));
+								prefs.getString(PREF_CALLSIGN,
+										ress.getString(R.string.pref_callsign_default)),
+								prefs.getString(PREF_HOST,
+										ress.getString(R.string.pref_host_default)),
+								Integer.valueOf(prefs.getString(PREF_PORT,
+										ress.getString(R.string.pref_port_default))));
 						client.register(listener);
 					} catch (Exception e) {
 						e.printStackTrace();

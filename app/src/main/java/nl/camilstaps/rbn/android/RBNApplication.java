@@ -61,8 +61,8 @@ public final class RBNApplication extends Application {
 		for (String type : prefs.getStringSet(PREF_FILTER_TYPE, new ArraySet<String>()))
 			typeFilter.add(Entry.Type.valueOf(type));
 		speedFilter.setRange(
-				prefs.getFloat(PREF_FILTER_SPEED + "_min", 0),
-				prefs.getFloat(PREF_FILTER_SPEED + "_max", 50));
+				prefs.getFloat(PREF_FILTER_SPEED_MIN, 0),
+				prefs.getFloat(PREF_FILTER_SPEED_MAX, 50));
 	}
 
 	public void quickToast(String text) {

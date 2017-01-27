@@ -33,7 +33,7 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 
 	public void bumpToEnd(int index) {
 		E temp = get(index);
-		for (int i = getRealIndex(index); i < cursor - 1; i = (i + 1) % maxLength)
+		for (int i = getRealIndex(index); i != cursor - 1; i = (i + 1) % maxLength)
 			elements[i] = elements[(i+1) % maxLength];
 		elements[(cursor - 1 + maxLength) % maxLength] = temp;
 	}

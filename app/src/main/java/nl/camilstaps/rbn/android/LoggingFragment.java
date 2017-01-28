@@ -26,6 +26,7 @@ import nl.camilstaps.android.Util;
 import nl.camilstaps.list.EndDiscardingList;
 import nl.camilstaps.rbn.Band;
 import nl.camilstaps.rbn.Callsign;
+import nl.camilstaps.rbn.CallsignTable;
 import nl.camilstaps.rbn.Entry;
 import nl.camilstaps.rbn.NewRecordListener;
 import nl.camilstaps.rbn.R;
@@ -138,12 +139,19 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 			}
 		});
 
+		try {
+			CallsignTable callsignTable = CallsignTable.getInstance();
+			((TextView) alertView.findViewById(R.id.callsign_description)).setText(
+					callsignTable.lookup(entry.getDe()));
+		} catch (NullPointerException e) {
+			((TextView) alertView.findViewById(R.id.callsign_description)).setText(
+					getResources().getString(R.string.warning_unknown_callsign));
+		}
+
 		((ImageView) alertView.findViewById(R.id.flag)).setImageResource(
 				getFlagResource(entry.getDe()));
 		((TextView) alertView.findViewById(R.id.callsign)).setText(
 				entry.getDe().toString());
-		((TextView) alertView.findViewById(R.id.callsign_description)).setText(
-				"Description");
 		((TextView) alertView.findViewById(R.id.main_info)).setText(Util.fromHtml(
 				String.format("%.1f", entry.getAvgFrequency()) + " &#8226; " +
 				entry.getAvgSpeed() + " &#8226; " +

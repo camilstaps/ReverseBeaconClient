@@ -9,6 +9,7 @@ import android.support.v4.util.ArraySet;
 import android.widget.Toast;
 
 import nl.camilstaps.rbn.Band;
+import nl.camilstaps.rbn.CallsignTable;
 import nl.camilstaps.rbn.Client;
 import nl.camilstaps.rbn.Entry;
 import nl.camilstaps.rbn.NewRecordListener;
@@ -63,6 +64,19 @@ public final class RBNApplication extends Application {
 		speedFilter.setRange(
 				prefs.getFloat(PREF_FILTER_SPEED_MIN, 0),
 				prefs.getFloat(PREF_FILTER_SPEED_MAX, 50));
+
+		new AsyncTask<Void, Void, Void>() {
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+					CallsignTable.getInstance(getResources().openRawResource(R.raw.ok1rr),
+							getResources().getString(R.string.warning_unknown_callsign));
+				} catch (Exception e) {
+					slowToast(getResources().getString(R.string.error_load_callsigns));
+				}
+				return null;
+			}
+		}.execute();
 	}
 
 	public void quickToast(String text) {
@@ -71,6 +85,10 @@ public final class RBNApplication extends Application {
 		else
 			toast.setText(text);
 		toast.show();
+	}
+
+	public void slowToast(String text) {
+		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
 	}
 
 	public void registerClientListener(final NewRecordListener listener) {

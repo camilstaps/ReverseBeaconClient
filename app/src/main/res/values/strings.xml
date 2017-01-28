@@ -30,6 +30,8 @@
 	]]></string>
 
 	<string name="warning_invalid_callsign">"%s" is not a valid callsign</string>
+	<string name="warning_unknown_callsign">Unknown callsign class</string>
+	<string name="error_load_callsigns">Could not load detailed callsign information tables</string>
 
 	<string name="flag_content_description">Country flag</string>
 	<string name="band_icon_content_description"/>

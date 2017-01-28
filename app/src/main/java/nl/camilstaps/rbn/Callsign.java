@@ -2,6 +2,7 @@ package nl.camilstaps.rbn;
 
 public final class Callsign {
 	private final String callsign;
+	private String description;
 
 	public Callsign (String callsign) {
 		this.callsign = callsign;
@@ -13,6 +14,13 @@ public final class Callsign {
 
 	public Country getCountry() {
 		return Country.fromCallsign(this);
+	}
+
+	public String getDescription() {
+		if (description == null)
+			description = CallsignTable.getInstance().lookup(this);
+
+		return description;
 	}
 
 	@Override

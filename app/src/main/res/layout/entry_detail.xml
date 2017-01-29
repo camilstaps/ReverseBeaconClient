@@ -42,8 +42,7 @@
 					android:layout_height="wrap_content"
 					android:layout_alignParentRight="true"
 					android:layout_marginRight="4dp"
-					android:textSize="18sp"
-					hi/>
+					android:textSize="18sp"/>
 
 			</RelativeLayout>
 

@@ -18,10 +18,8 @@
 
 	<string name="text_info"><![CDATA[
 		<h2>Acknowledgements</h2>
-		<ul>
-			<li>For more information about the Reverse Beacon Network project, see <a href="http://www.reversebeacon.net/">reversebeacon.net</a>.</li>
-			<li>Detailed callsign information comes from a list by <a href="http://ok1rr.com">OK1RR</a>.
-		</ul>
+		<p>For more information about the Reverse Beacon Network project, see <a href="http://www.reversebeacon.net/">reversebeacon.net</a>.</p>
+		<p>Detailed callsign information comes from a list by <a href="http://ok1rr.com">OK1RR</a>.</p>
 		<h2>Author, copyright and license</h2>
 		<p>The source code of this app is copyright &copy; 2017 Camil Staps.</p>
 		<p>

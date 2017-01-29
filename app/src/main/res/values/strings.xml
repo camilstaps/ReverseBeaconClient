@@ -44,6 +44,8 @@
 	<string name="minimum">Min</string>
 	<string name="maximum">Max</string>
 
+	<string name="qrz_link"><![CDATA[<a href="https://qrz.com/db/%s">QRZ</a>]]></string>
+
 	<string name="title_activity_settings">Settings</string>
 
 	<string name="pref_general">General</string>

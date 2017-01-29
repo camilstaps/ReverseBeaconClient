@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,6 +157,11 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 				String.format("%.1f", entry.getAvgFrequency()) + " &#8226; " +
 				entry.getAvgSpeed() + " &#8226; " +
 				entry.getMode() + " &#8226; " + entry.getType()));
+
+		TextView qrzLink = (TextView) alertView.findViewById(R.id.qrz_link);
+		qrzLink.setText(Util.fromHtml(String.format(
+				getResources().getString(R.string.qrz_link), entry.getDe().toString())));
+		qrzLink.setMovementMethod(LinkMovementMethod.getInstance());
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 		builder.setView(alertView);

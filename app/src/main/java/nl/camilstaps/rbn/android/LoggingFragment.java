@@ -129,7 +129,16 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 				activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View alertView = inflater.inflate(R.layout.entry_detail, parent, false);
 		final RecordArrayAdapter adapter = new RecordArrayAdapter(activity, entry);
-		((ListView) alertView.findViewById(R.id.record_list)).setAdapter(adapter);
+
+		ListView dxList = (ListView) alertView.findViewById(R.id.record_list);
+		dxList.setAdapter(adapter);
+		dxList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Entry.Record record = adapter.getItem(position);
+				((RBNApplication) activity.getApplication()).quickToast(record.dx.getDescription());
+			}
+		});
 
 		entry.setOnRecordAddedListener(new Entry.OnRecordAddedListener() {
 			@Override
@@ -138,19 +147,12 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 			}
 		});
 
-		try {
-			CallsignTable callsignTable = CallsignTable.getInstance();
-			((TextView) alertView.findViewById(R.id.callsign_description)).setText(
-					callsignTable.lookup(entry.getDe()));
-		} catch (NullPointerException e) {
-			((TextView) alertView.findViewById(R.id.callsign_description)).setText(
-					getResources().getString(R.string.warning_unknown_callsign));
-		}
-
 		((ImageView) alertView.findViewById(R.id.flag)).setImageResource(
 				getFlagResource(entry.getDe()));
 		((TextView) alertView.findViewById(R.id.callsign)).setText(
 				entry.getDe().toString());
+		((TextView) alertView.findViewById(R.id.callsign_description)).setText(
+				entry.getDe().getDescription());
 		((TextView) alertView.findViewById(R.id.main_info)).setText(Util.fromHtml(
 				String.format("%.1f", entry.getAvgFrequency()) + " &#8226; " +
 				entry.getAvgSpeed() + " &#8226; " +

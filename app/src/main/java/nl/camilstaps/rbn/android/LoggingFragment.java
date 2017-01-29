@@ -1,13 +1,12 @@
 package nl.camilstaps.rbn.android;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +25,6 @@ import java.util.TimeZone;
 import nl.camilstaps.android.Util;
 import nl.camilstaps.list.EndDiscardingList;
 import nl.camilstaps.rbn.Band;
-import nl.camilstaps.rbn.Callsign;
-import nl.camilstaps.rbn.CallsignTable;
 import nl.camilstaps.rbn.Entry;
 import nl.camilstaps.rbn.NewRecordListener;
 import nl.camilstaps.rbn.R;
@@ -40,6 +37,7 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 	private final EndDiscardingList<Entry> entries = new EndDiscardingList<>(100);
 
 	private boolean isRegistered = false;
+	private Entry openedEntryDetails;
 
 	@Override
 	public void onAttach(Context context) {
@@ -118,60 +116,36 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 
 		callListView.setOnItemClickListener(this);
 
+		if (openedEntryDetails != null)
+			openEntryDetails(openedEntryDetails);
+
 		return view;
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		Entry entry = adapter.getItem(position);
-
-		LayoutInflater inflater = (LayoutInflater)
-				activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View alertView = inflater.inflate(R.layout.entry_detail, parent, false);
-		final RecordArrayAdapter adapter = new RecordArrayAdapter(activity, entry);
-
-		ListView dxList = (ListView) alertView.findViewById(R.id.record_list);
-		dxList.setAdapter(adapter);
-		dxList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Entry.Record record = adapter.getItem(position);
-				((RBNApplication) activity.getApplication()).quickToast(record.dx.getDescription());
-			}
-		});
-
-		entry.setOnRecordAddedListener(new Entry.OnRecordAddedListener() {
-			@Override
-			public void onRecordAdded(Entry.Record record) {
-				adapter.notifyDataSetChanged();
-			}
-		});
-
-		((ImageView) alertView.findViewById(R.id.flag)).setImageResource(
-				getFlagResource(entry.getDe()));
-		((TextView) alertView.findViewById(R.id.callsign)).setText(
-				entry.getDe().toString());
-		((TextView) alertView.findViewById(R.id.callsign_description)).setText(
-				entry.getDe().getDescription());
-		((TextView) alertView.findViewById(R.id.main_info)).setText(Util.fromHtml(
-				String.format("%.1f", entry.getAvgFrequency()) + " &#8226; " +
-				entry.getAvgSpeed() + " &#8226; " +
-				entry.getMode() + " &#8226; " + entry.getType()));
-
-		TextView qrzLink = (TextView) alertView.findViewById(R.id.qrz_link);
-		qrzLink.setText(Util.fromHtml(String.format(
-				getResources().getString(R.string.qrz_link), entry.getDe().toString())));
-		qrzLink.setMovementMethod(LinkMovementMethod.getInstance());
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		builder.setView(alertView);
-		builder.show();
+		openEntryDetails(entry);
 	}
 
-	private int getFlagResource(Callsign call) {
-		return activity.getResources().getIdentifier(
-				"flag_" + call.getCountry().toString().toLowerCase(),
-				"drawable", "nl.camilstaps.rbn");
+	private void openEntryDetails(Entry entry) {
+		EntryDetailFragment fragment = new EntryDetailFragment();
+		fragment.setEntry(entry);
+		fragment.setRetainInstance(true);
+		getActivity().getFragmentManager()
+				.beginTransaction()
+				.add(fragment, "entry")
+				.addToBackStack(null)
+				.commit();
+
+		openedEntryDetails = entry;
+
+		fragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
+			@Override
+			public void onDismiss(DialogInterface dialog) {
+				openedEntryDetails = null;
+			}
+		});
 	}
 
 	private class EntryArrayAdapter extends ArrayAdapter<Entry> {
@@ -211,9 +185,8 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 			Entry entry = getItem(position);
 
 			try {
-				holder.flag.setImageResource(activity.getResources().getIdentifier(
-						"flag_" + entry.getDe().getCountry().toString().toLowerCase(),
-						"drawable", "nl.camilstaps.rbn"));
+				holder.flag.setImageResource(
+						nl.camilstaps.rbn.android.Util.getFlagResource(activity, entry.getDe()));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -274,66 +247,5 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 	private static class EntryItemViewHolder {
 		private ImageView bandIcon, flag;
 		private TextView band, callsign, description, frequency, mode, time;
-	}
-
-	private class RecordArrayAdapter extends ArrayAdapter<Entry.Record> {
-		private final Context context;
-		private final Entry entry;
-
-		RecordArrayAdapter(Context context, Entry entry) {
-			super(context, -1, entry.getRecords());
-			this.context = context;
-			this.entry = entry;
-		}
-
-		@Override
-		@NonNull
-		public View getView(int position, View view, @NonNull ViewGroup parent) {
-			RecordItemViewHolder holder;
-
-			if (view == null) {
-				holder = new RecordItemViewHolder();
-
-				LayoutInflater inflater = (LayoutInflater)
-						context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				view = inflater.inflate(R.layout.record_item, parent, false);
-
-				holder.callsign = (TextView) view.findViewById(R.id.callsign);
-				holder.flag = (ImageView) view.findViewById(R.id.flag);
-				holder.main_info = (TextView) view.findViewById(R.id.main_info);
-				holder.strength = (TextView) view.findViewById(R.id.strength);
-				holder.timestamp = (TextView) view.findViewById(R.id.timestamp);
-
-				view.setTag(holder);
-			} else {
-				holder = (RecordItemViewHolder) view.getTag();
-			}
-
-			Entry.Record r = getItem(position);
-
-			holder.flag.setImageResource(getFlagResource(r.dx));
-			holder.callsign.setText(r.dx.toString());
-			holder.strength.setText(String.format("%d dB", r.strength));
-
-			DateFormat df = new SimpleDateFormat("HH:mm'Z'");
-			df.setTimeZone(TimeZone.getTimeZone("Zulu"));
-			holder.timestamp.setText(df.format(r.date));
-
-			holder.main_info.setText(Util.fromHtml(
-					String.format("%.1f", r.frequency) + " &#8226; " +
-					r.speed + " " + entry.getSpeedUnit()));
-
-			return view;
-		}
-
-		@Override
-		public Entry.Record getItem(int position) {
-			return super.getItem(getCount() - position - 1);
-		}
-	}
-
-	private static class RecordItemViewHolder {
-		private ImageView flag;
-		private TextView callsign, main_info, strength, timestamp;
 	}
 }

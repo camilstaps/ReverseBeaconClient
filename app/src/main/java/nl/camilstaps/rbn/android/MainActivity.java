@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import nl.camilstaps.rbn.R;
+import nl.camilstaps.rbn.RecordCounter;
 
 public class MainActivity extends AppCompatActivity {
 	private DrawerLayout drawer;
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 
 		openFragments();
+
+		setupCounter();
 	}
 
 	public void openFragments() {
@@ -77,6 +80,22 @@ public class MainActivity extends AppCompatActivity {
 
 			openedWelcome = true;
 		}
+	}
+
+	public void setupCounter() {
+		RecordCounter counter = new RecordCounter();
+		((RBNApplication) getApplication()).registerClientListener(counter);
+		counter.setNewCountListener(new RecordCounter.NewCountListener() {
+			@Override
+			public void onNewMinuteAverage(final int all, final int matched) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						setTitle(String.format(getResources().getString(R.string.title), all, matched));
+					}
+				});
+			}
+		});
 	}
 
 	private class DrawerItemClickListener implements NavigationView.OnNavigationItemSelectedListener {

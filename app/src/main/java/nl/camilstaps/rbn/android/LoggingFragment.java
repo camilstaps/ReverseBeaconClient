@@ -28,7 +28,6 @@ import nl.camilstaps.rbn.Band;
 import nl.camilstaps.rbn.Entry;
 import nl.camilstaps.rbn.NewRecordListener;
 import nl.camilstaps.rbn.R;
-import nl.camilstaps.rbn.filter.Filter;
 
 public class LoggingFragment extends Fragment implements AdapterView.OnItemClickListener {
 	private Activity activity;
@@ -54,35 +53,36 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 	}
 
 	private void registerLogger() {
-		final Filter filter = ((RBNApplication) getActivity().getApplication()).getMainFilter();
-
 		((RBNApplication) activity.getApplication()).registerClientListener(
 				new NewRecordListener() {
 			@Override
-			public void receive(final Entry entry) {
-				if (filter.matches(entry)) {
-					activity.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							boolean addNew = true;
-							int bumpIndex = 0;
-							for (Entry otherEntry : entries) synchronized (entries) {
-								if (otherEntry.attemptMerge(entry)) {
-									addNew = false;
-									break;
-								}
-								bumpIndex++;
+			public boolean receivesAll() {
+				return false;
+			}
+
+			@Override
+			public void receive(final Entry entry, boolean matchesFilter) {
+				activity.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						boolean addNew = true;
+						int bumpIndex = 0;
+						for (Entry otherEntry : entries) synchronized (entries) {
+							if (otherEntry.attemptMerge(entry)) {
+								addNew = false;
+								break;
 							}
-
-							if (addNew)
-								entries.add(entry);
-							else
-								entries.bumpToEnd(bumpIndex);
-
-							adapter.notifyDataSetChanged();
+							bumpIndex++;
 						}
-					});
-				}
+
+						if (addNew)
+							entries.add(entry);
+						else
+							entries.bumpToEnd(bumpIndex);
+
+						adapter.notifyDataSetChanged();
+					}
+				});
 			}
 
 			@Override

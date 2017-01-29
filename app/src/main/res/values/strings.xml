@@ -1,6 +1,8 @@
 <resources>
 	<string name="app_name">Reverse Beacon Client</string>
 
+	<string name="title" formatted="false">%d spots / min (%d total)</string>
+
 	<string name="drawer_log">Station list</string>
 	<string name="drawer_filters">Filters</string>
 	<string name="drawer_settings">Settings</string>

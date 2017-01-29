@@ -14,6 +14,8 @@ import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import nl.camilstaps.rbn.filter.Filter;
+
 public final class Client implements NewRecordListener {
 	private final TelnetClient client;
 	private InputStream inputStream;
@@ -24,6 +26,8 @@ public final class Client implements NewRecordListener {
 	private final String call;
 
 	private final Collection<NewRecordListener> listeners = new ArrayList<>();
+
+	private Filter filter;
 
 	private boolean alive = false;
 	private final static int RECONNECT_INTERVAL = 1000;
@@ -64,6 +68,10 @@ public final class Client implements NewRecordListener {
 		listeners.add(listener);
 	}
 
+	public void setFilter(Filter filter) {
+		this.filter = filter;
+	}
+
 	private void readUntil(String pattern) throws IOException {
 		char lastChar = pattern.charAt(pattern.length() - 1);
 		StringBuilder sb = new StringBuilder();
@@ -78,9 +86,15 @@ public final class Client implements NewRecordListener {
 	}
 
 	@Override
-	public void receive(Entry entry) {
+	public boolean receivesAll() {
+		return true;
+	}
+
+	@Override
+	public void receive(Entry entry, boolean matchesFilter) {
 		for (NewRecordListener listener : listeners)
-			listener.receive(entry);
+			if (matchesFilter || listener.receivesAll())
+				listener.receive(entry, matchesFilter);
 	}
 
 	@Override
@@ -141,7 +155,8 @@ public final class Client implements NewRecordListener {
 			}
 
 			try {
-				receive(Entry.factory(line));
+				Entry entry = Entry.factory(line);
+				receive(entry, filter.matches(entry));
 			} catch (ParseException e) {
 				unparsable(line, e);
 				e.printStackTrace();

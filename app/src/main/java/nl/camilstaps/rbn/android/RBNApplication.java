@@ -110,6 +110,7 @@ public final class RBNApplication extends Application {
 								Integer.valueOf(prefs.getString(PREF_PORT,
 										ress.getString(R.string.pref_port_default))));
 						client.register(listener);
+						client.setFilter(compoundFilter);
 					} catch (Exception e) {
 						e.printStackTrace();
 						publishProgress(e);
@@ -129,10 +130,6 @@ public final class RBNApplication extends Application {
 		} else {
 			client.register(listener);
 		}
-	}
-
-	public Filter getMainFilter() {
-		return compoundFilter;
 	}
 
 	public AnyOfFilter<Band> getBandFilter() {

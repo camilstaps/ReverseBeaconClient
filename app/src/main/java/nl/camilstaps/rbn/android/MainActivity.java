@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
 			if (loggingFragment == null) {
 				loggingFragment = new LoggingFragment();
+				loggingFragment.setRetainInstance(true);
 				fm.beginTransaction()
 						.add(R.id.activity_main_content, loggingFragment, "log").commit();
 			}
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
 					case R.id.drawer_settings: fragment = new SettingsFragment(); break;
 					case R.id.drawer_info:     fragment = new InfoFragment(); break;
 				}
+				fragment.setRetainInstance(true);
 				add = true;
 			}
 

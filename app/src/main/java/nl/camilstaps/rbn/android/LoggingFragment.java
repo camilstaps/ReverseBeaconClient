@@ -45,8 +45,6 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 	public void onAttach(Context context) {
 		super.onAttach(context);
 
-		setRetainInstance(true);
-
 		if (activity == null)
 			activity = getActivity();
 

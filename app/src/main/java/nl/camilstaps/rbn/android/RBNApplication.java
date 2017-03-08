@@ -69,7 +69,7 @@ public final class RBNApplication extends Application {
 			@Override
 			protected Void doInBackground(Void... params) {
 				try {
-					CallsignTable.getInstance(getResources().openRawResource(R.raw.cty));
+					CallsignTable.setup(getResources().openRawResource(R.raw.cty));
 				} catch (Exception e) {
 					slowToast(getResources().getString(R.string.error_load_callsigns));
 				}

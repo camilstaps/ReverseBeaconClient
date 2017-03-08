@@ -5,8 +5,6 @@ import android.text.Spanned;
 import android.widget.Toast;
 
 public final class Util {
-	private static Toast toast;
-
 	// http://stackoverflow.com/a/37905107/1544337
 	@SuppressWarnings("deprecation")
 	public static Spanned fromHtml(String html){

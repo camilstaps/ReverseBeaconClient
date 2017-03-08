@@ -16,11 +16,9 @@ public class CallsignTable {
 		return instance;
 	}
 
-	public static CallsignTable getInstance(InputStream inputStream) throws IOException {
+	public static void setup(InputStream inputStream) throws IOException {
 		if (instance == null)
 			instance = new CallsignTable(inputStream);
-
-		return instance;
 	}
 
 	private CallsignTable(InputStream inputStream) throws IOException {

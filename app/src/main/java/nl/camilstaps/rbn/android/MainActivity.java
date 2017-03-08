@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
 				|| call.matches("\\d[a-zA-Z]{0,2}\\d{0,4}[a-zA-Z]{1,4}")) {
 			setContentView(R.layout.activity_main);
 
-			String[] titles = getResources().getStringArray(R.array.side_nav_titles);
 			drawer = (DrawerLayout) findViewById(R.id.activity_main_drawer);
 			NavigationView navigationView = (NavigationView) findViewById(R.id.activity_main_drawer_navigation);
 			navigationView.setNavigationItemSelectedListener(new DrawerItemClickListener());
@@ -89,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onNewMinuteAverage(final int all, final int matched) {
 				runOnUiThread(new Runnable() {
+					@SuppressLint("StringFormatInvalid")
 					@Override
 					public void run() {
 						setTitle(String.format(getResources().getString(R.string.title), all, matched));

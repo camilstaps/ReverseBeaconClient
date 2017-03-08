@@ -176,7 +176,7 @@ public class EndDiscardingList<E> implements List<E>, Serializable {
 
 	private class Itr implements Iterator<E> {
 		private int index = 0;
-		private int expectedCursor = cursor;
+		private final int expectedCursor = cursor;
 
 		@Override
 		public boolean hasNext() {

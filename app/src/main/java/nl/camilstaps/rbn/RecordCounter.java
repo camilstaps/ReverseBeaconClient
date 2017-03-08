@@ -5,8 +5,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class RecordCounter implements NewRecordListener {
-	private int fullCounters[] = {0,0,0,0,0};
-	private int matchedCounters[] = {0,0,0,0,0};
+	private final int fullCounters[] = {0,0,0,0,0};
+	private final int matchedCounters[] = {0,0,0,0,0};
 	
 	private NewCountListener listener;
 

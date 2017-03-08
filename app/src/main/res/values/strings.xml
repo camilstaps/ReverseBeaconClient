@@ -1,7 +1,7 @@
 <resources>
 	<string name="app_name">Reverse Beacon Client</string>
 
-	<string name="title" formatted="false">%d spots / min (%d total)</string>
+	<string name="title" formatted="false">%1$d spots / min (%2$d total)</string>
 
 	<string name="drawer_log">Station list</string>
 	<string name="drawer_filters">Filters</string>
@@ -34,7 +34,7 @@
 		</p>
 	]]></string>
 
-	<string name="warning_invalid_callsign">"%s" is not a valid callsign</string>
+	<string name="warning_invalid_callsign">"%1$s" is not a valid callsign</string>
 	<string name="warning_unknown_callsign">Unknown callsign class</string>
 	<string name="error_load_callsigns">Could not load detailed callsign information tables</string>
 
@@ -44,7 +44,7 @@
 	<string name="minimum">Min</string>
 	<string name="maximum">Max</string>
 
-	<string name="qrz_link"><![CDATA[<a href="https://qrz.com/db/%s">QRZ</a>]]></string>
+	<string name="qrz_link"><![CDATA[<a href="https://qrz.com/db/%1$s">QRZ</a>]]></string>
 
 	<string name="title_activity_settings">Settings</string>
 

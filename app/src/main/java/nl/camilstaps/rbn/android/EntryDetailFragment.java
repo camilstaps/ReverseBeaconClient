@@ -54,13 +54,16 @@ public class EntryDetailFragment extends DialogFragment {
 		View alertView = inflater.inflate(R.layout.entry_detail, null);
 		final RecordArrayAdapter adapter = new RecordArrayAdapter(activity, entry);
 
+		final String defaultCallDesc = getResources().getString(R.string.warning_unknown_callsign);
+
 		ListView dxList = (ListView) alertView.findViewById(R.id.record_list);
 		dxList.setAdapter(adapter);
 		dxList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Entry.Record record = adapter.getItem(position);
-				((RBNApplication) activity.getApplication()).quickToast(record.dx.getDescription());
+				((RBNApplication) activity.getApplication()).quickToast(
+						record.dx.getDescription(defaultCallDesc));
 			}
 		});
 
@@ -76,7 +79,7 @@ public class EntryDetailFragment extends DialogFragment {
 		((TextView) alertView.findViewById(R.id.callsign)).setText(
 				entry.getDe().toString());
 		((TextView) alertView.findViewById(R.id.callsign_description)).setText(
-				entry.getDe().getDescription());
+				entry.getDe().getDescription(defaultCallDesc));
 		((TextView) alertView.findViewById(R.id.main_info)).setText(Util.fromHtml(
 				String.format("%.1f", entry.getAvgFrequency()) + " &#8226; " +
 						entry.getAvgSpeed() + " &#8226; " +

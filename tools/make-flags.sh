@@ -33,13 +33,10 @@ for dens in "${!formats[@]}"; do
 	for f in *.svg; do
 		inkscape -z -e "$densdir/flag_${f/.svg/.png}" -w "$width" -h "$height" "$f"
 	done
-	mv "$densdir/flag__united_nations.png" "$densdir/flag_united_nations.png"
-	rm "$densdir"/flag__* "$densdir/flag_aa.png"
-	ln -s "flag_united_nations.png" "$densdir/flag_icao.png"
-	ln -s "flag_united_nations.png" "$densdir/flag_wmo.png"
+	rm "$densdir"/flag__{basque,catalonia,earth_pernefeldt,galicia,olympic}.png "$densdir/flag_aa.png"
 done
 
 cd "$BACK"
 
-rsync -lr "$DIR/$FLAGS/"drawable-* app/src/main/res
+rsync -lr "$DIR/$FLAGS/"drawable-* ../app/src/main/res
 rm -r "$DIR/$FLAGS/drawable-"*

@@ -18,5 +18,8 @@ gen/
 proguard/
 *.log
 
-flags
+tools/flags
 app/src/main/res/drawable-*/flag_*.png
+
+tools/cty.dat
+app/src/main/res/raw/cty.txt

@@ -13,12 +13,14 @@ public final class Callsign {
 	}
 
 	public Country getCountry() {
-		return Country.fromCallsign(this);
+		return CallsignTable.getInstance().lookup(this);
 	}
 
-	public String getDescription() {
-		if (description == null)
-			description = CallsignTable.getInstance().lookup(this);
+	public String getDescription(String defaultValue) {
+		if (description == null) {
+			Country country = CallsignTable.getInstance().lookup(this);
+			description = country != null ? country.getName() : defaultValue;
+		}
 
 		return description;
 	}

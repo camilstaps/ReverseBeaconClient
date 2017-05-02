@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,14 +20,27 @@ import nl.camilstaps.rbn.RecordCounter;
 
 public class MainActivity extends AppCompatActivity {
 	private DrawerLayout drawer;
+	private ActionBarDrawerToggle drawerToggle;
 
 	private boolean openedWelcome = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		openFragments();
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		drawerToggle.syncState();
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
 	}
 
 	public void openFragments() {
@@ -40,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
 			drawer = (DrawerLayout) findViewById(R.id.activity_main_drawer);
 			NavigationView navigationView = (NavigationView) findViewById(R.id.activity_main_drawer_navigation);
 			navigationView.setNavigationItemSelectedListener(new DrawerItemClickListener());
+			drawerToggle = new ActionBarDrawerToggle(this, drawer, R.string.drawer_open, R.string.drawer_close);
+			drawer.addDrawerListener(drawerToggle);
 
 			FragmentManager fm = getFragmentManager();
 			Fragment loggingFragment = fm.findFragmentByTag("log");

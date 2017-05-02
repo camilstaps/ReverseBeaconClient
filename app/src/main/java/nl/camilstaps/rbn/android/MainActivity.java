@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 					public void onClick(View v) {
 						prefs.edit()
 								.putString(RBNApplication.PREF_CALLSIGN,
-										callsignEditText.getText().toString())
+										callsignEditText.getText().toString().trim())
 								.commit();
 
 						openFragments();

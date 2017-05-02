@@ -18,7 +18,8 @@
 		The source code for this app is on GitHub: <a href="https://github.com/camilstaps/ReverseBeaconClient">https://github.com/camilstaps/ReverseBeaconClient</a>.
 	</string>
 	<string name="welcome_callsign_hint">PD7LOL</string>
-	<string name="welcome_button_text">Start</string>
+	<string name="welcome_button_text">Continue</string>
+	<string name="welcome_instructions_button_text">Start</string>
 
 	<string name="text_info"><![CDATA[
 		<h2>Instructions</h2>
@@ -29,19 +30,17 @@
 		<h2>Acknowledgements</h2>
 		<p>For more information about the Reverse Beacon Network project, see <a href="http://www.reversebeacon.net/">reversebeacon.net</a>.</p>
 		<p>Callsign resolution is done with lists by <a href="http://country-files.com">Jim Reisert</a> AD1C.</p>
+		<h2>Getting help</h2>
+		<p>If you need help, found a bug or have a feature request, please <a href="https://github.com/camilstaps/ReverseBeaconClient/issues">open an issue on GitHub</a>.</p>
 		<h2>Author, copyright and license</h2>
 		<p>The source code of this app is copyright &copy; 2017 Camil Staps.</p>
 		<p>
 			This app was written by <a href="https://camilstaps.nl">Camil Staps</a> PD7LOL and licensed under the GNU General Public License, version 3.
 			Its source code is available at <a href="https://github.com/camilstaps/ReverseBeaconClient">github.com/camilstaps/ReverseBeaconClient</a>.
 		</p>
-		<h2>Getting help</h2>
-		<p>
-			If you need help, found a bug or have a feature request, please <a href="https://github.com/camilstaps/ReverseBeaconClient/issues">open an issue on GitHub</a>.
-		</p>
 	]]></string>
 
-	<string name="warning_invalid_callsign">"%1$s" is not a valid callsign</string>
+	<string name="warning_invalid_callsign">\'%1$s\' is not a valid callsign</string>
 	<string name="warning_unknown_callsign">Unknown callsign class</string>
 	<string name="error_load_callsigns">Could not load detailed callsign information tables</string>
 

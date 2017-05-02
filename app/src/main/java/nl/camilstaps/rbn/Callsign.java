@@ -4,6 +4,11 @@ public final class Callsign {
 	private final String callsign;
 	private String description;
 
+	public static boolean isValid(String callsign) {
+		return callsign.matches("[a-zA-Z]{1,2}\\d{1,4}[a-zA-Z]{0,4}")
+				|| callsign.matches("\\d[a-zA-Z]{0,2}\\d{0,4}[a-zA-Z]{1,4}");
+	}
+
 	public Callsign (String callsign) {
 		this.callsign = callsign;
 	}

@@ -3,6 +3,7 @@ package nl.camilstaps.rbn.android;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ public class InfoFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_info, container, false);
 		TextView textView = (TextView) view.findViewById(R.id.info_text);
 		textView.setText(Util.fromHtml(getResources().getString(R.string.text_info)));
+		textView.setMovementMethod(new ScrollingMovementMethod());
 		return view;
 	}
 }

@@ -19,9 +19,14 @@
 	<string name="welcome_button_text">Start</string>
 
 	<string name="text_info"><![CDATA[
+		<h2>Instructions</h2>
+		<p>When the app opens, you see a list that is continuously updated with spots from the Reverse Beacon Network (RBN).</p>
+		<p>Slide from the left edge to open the menu. From there, you can change the filters, with which you can filter the spots.</p>
+		<p>In the settings, you can change the callsign you are using to \'login\' at the RBN, and change other preferences.</p>
+		<p>You can always get back to these instructions using the help item in the menu.</p>
 		<h2>Acknowledgements</h2>
 		<p>For more information about the Reverse Beacon Network project, see <a href="http://www.reversebeacon.net/">reversebeacon.net</a>.</p>
-		<p>Callsign resolution is done with lists by <a href="http://country-files.com">Jim Reisert AD1C</a>.</p>
+		<p>Callsign resolution is done with lists by <a href="http://country-files.com">Jim Reisert</a> AD1C.</p>
 		<h2>Author, copyright and license</h2>
 		<p>The source code of this app is copyright &copy; 2017 Camil Staps.</p>
 		<p>

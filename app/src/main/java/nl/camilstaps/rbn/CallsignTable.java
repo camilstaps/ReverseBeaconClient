@@ -29,7 +29,7 @@ public class CallsignTable {
 		while ((line = br.readLine()) != null) {
 			if (line.charAt(0) == '>') {
 				String[] parts = line.substring(1).split(";");
-				Country country = new Country(parts[0], parts[1].split("-"));
+				Country country = new Country(parts[0], parts[2], parts[1].split("-"));
 				table.add(new TableEntry<>(prefixes, country));
 				prefixes = new ArrayList<>();
 			} else {

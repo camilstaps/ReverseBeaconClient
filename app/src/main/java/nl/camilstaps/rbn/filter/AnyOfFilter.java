@@ -43,8 +43,15 @@ public class AnyOfFilter<T> implements Filter, Collection<T> {
 					if (values.contains(record.dx))
 						return true;
 				return false;
+			case DxContinent:
+				for (Entry.Record record : entry.getRecords())
+					if (values.contains(record.dx.getCountry().getContinent()))
+						return true;
+				return false;
 			case De:
 				return values.contains(entry.getDe());
+			case DeContinent:
+				return values.contains(entry.getDe().getCountry().getContinent());
 			default:
 				throw new IllegalArgumentException("Invalid field " + field + " for AnyOfFilter.");
 		}

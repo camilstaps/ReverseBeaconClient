@@ -29,16 +29,18 @@ class Country:
 
     def __init__(self,
             name=None, cqzone=None, ituzone=None, primary_prefix=None,
-            aliases=None):
+            continent=None, aliases=None):
         if name is None or \
                 cqzone is None or \
                 ituzone is None or \
-                primary_prefix is None:
+                primary_prefix is None or \
+                continent is None:
             raise AttributeError('Supply Country with all parameters')
         self.name = name
         self.cqzone = cqzone
         self.ituzone = ituzone
         self.primary_prefix = primary_prefix
+        self.continent = continent
         self.isocodes = Country.iso_resolver.resolve(primary_prefix)
         self.aliases = aliases if aliases is not None else []
 
@@ -46,10 +48,11 @@ class Country:
         self.aliases.append(alias)
 
     def __str__(self):
-        return '%s\n>%s;%s;%s' % (
+        return '%s\n>%s;%s;%s;%s' % (
                 '\n'.join(self.aliases),
                 self.name,
                 '-'.join(self.isocodes),
+                self.continent,
                 self.primary_prefix)
 
 class CTYParser:
@@ -98,8 +101,9 @@ class CTYParser:
         name = line[0:26].partition(':')[0]
         cqzone = int(line[26:31].partition(':')[0])
         ituzone = int(line[31:36].partition(':')[0])
+        continent = line[36:46].partition(':')[0]
         prefix = line[69:75].partition(':')[0]
-        self.current_country = Country(name, cqzone, ituzone, prefix)
+        self.current_country = Country(name, cqzone, ituzone, prefix, continent)
 
 def main():
     with open('itu_iso_mapping.txt', 'r') as f:

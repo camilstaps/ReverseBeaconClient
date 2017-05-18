@@ -11,6 +11,7 @@ import android.widget.Toast;
 import nl.camilstaps.rbn.Band;
 import nl.camilstaps.rbn.CallsignTable;
 import nl.camilstaps.rbn.Client;
+import nl.camilstaps.rbn.Country;
 import nl.camilstaps.rbn.Entry;
 import nl.camilstaps.rbn.NewRecordListener;
 import nl.camilstaps.rbn.R;
@@ -30,6 +31,8 @@ public final class RBNApplication extends Application {
 	public static final String PREF_FILTER_SPEED = "filter_speed";
 	public static final String PREF_FILTER_SPEED_MIN = "filter_speed_min";
 	public static final String PREF_FILTER_SPEED_MAX = "filter_speed_max";
+	public static final String PREF_FILTER_DE_CONTINENT = "filter_de_continent";
+	public static final String PREF_FILTER_DX_CONTINENT = "filter_dx_continent";
 
 	private Toast toast;
 	private Client client;
@@ -40,6 +43,8 @@ public final class RBNApplication extends Application {
 	final AnyOfFilter<Band> bandFilter = new AnyOfFilter<>(Filter.Field.Band);
 	final AnyOfFilter<Entry.Mode> modeFilter = new AnyOfFilter<>(Filter.Field.Mode);
 	final AnyOfFilter<Entry.Type> typeFilter = new AnyOfFilter<>(Filter.Field.Type);
+	final AnyOfFilter<Country.Continent> deContFilter = new AnyOfFilter<>(Filter.Field.DeContinent);
+	final AnyOfFilter<Country.Continent> dxContFilter = new AnyOfFilter<>(Filter.Field.DxContinent);
 	RangeFilter speedFilter;
 
 	@Override
@@ -54,6 +59,8 @@ public final class RBNApplication extends Application {
 		compoundFilter.add(modeFilter);
 		compoundFilter.add(typeFilter);
 		compoundFilter.add(speedFilter);
+		compoundFilter.add(deContFilter);
+		compoundFilter.add(dxContFilter);
 
 		for (String band : prefs.getStringSet(PREF_FILTER_BAND, new ArraySet<String>()))
 			bandFilter.add(new Band(Float.valueOf(band) / 100));
@@ -64,6 +71,10 @@ public final class RBNApplication extends Application {
 		speedFilter.setRange(
 				prefs.getFloat(PREF_FILTER_SPEED_MIN, 0),
 				prefs.getFloat(PREF_FILTER_SPEED_MAX, 50));
+		for (String cont : prefs.getStringSet(PREF_FILTER_DE_CONTINENT, new ArraySet<String>()))
+			deContFilter.add(Country.Continent.fromAbbreviation(cont));
+		for (String cont : prefs.getStringSet(PREF_FILTER_DX_CONTINENT, new ArraySet<String>()))
+			dxContFilter.add(Country.Continent.fromAbbreviation(cont));
 
 		new AsyncTask<Void, Void, Void>() {
 			@Override
@@ -145,5 +156,13 @@ public final class RBNApplication extends Application {
 
 	public RangeFilter getSpeedFilter() {
 		return speedFilter;
+	}
+
+	public AnyOfFilter<Country.Continent> getDeContinentFilter() {
+		return deContFilter;
+	}
+
+	public AnyOfFilter<Country.Continent> getDxContinentFilter() {
+		return dxContFilter;
 	}
 }

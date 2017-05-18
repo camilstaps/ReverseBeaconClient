@@ -6,6 +6,6 @@ public interface Filter {
 	boolean matches(Entry entry);
 
 	enum Field {
-		Dx, De, Band, Mode, Type, Frequency, Speed, Strength
+		Dx, DxContinent, De, DeContinent, Band, Mode, Type, Frequency, Speed, Strength
 	}
 }

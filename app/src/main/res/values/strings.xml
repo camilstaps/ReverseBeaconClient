@@ -67,6 +67,10 @@
 	<string name="pref_port_summ">The port of the telnet host</string>
 	<string name="pref_port_default" translatable="false">7000</string>
 
+	<string name="connecting">Connecting...</string>
+	<string name="listening">Listening...</string>
+	<string name="connect_failed">Failed to connect.</string>
+
 	<string-array name="side_nav_titles">
 		<item>List</item>
 		<item>Filters</item>
@@ -126,5 +130,23 @@
 		<item>DX</item>
 		<item>NCDXF</item>
 		<item>NCDXFB</item>
+	</string-array>
+
+	<string-array name="continent_abbreviations" translatable="false">
+		<item>AF</item>
+		<item>AU</item>
+		<item>EU</item>
+		<item>NA</item>
+		<item>OC</item>
+		<item>SA</item>
+	</string-array>
+
+	<string-array name="continents">
+		<item>Africa</item>
+		<item>Australia</item>
+		<item>Europe</item>
+		<item>North America</item>
+		<item>Oceania</item>
+		<item>South America</item>
 	</string-array>
 </resources>

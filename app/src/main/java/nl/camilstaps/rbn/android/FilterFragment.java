@@ -7,6 +7,7 @@ import android.preference.PreferenceFragment;
 import nl.camilstaps.android.MultiSelectListPreference;
 import nl.camilstaps.android.RangePreference;
 import nl.camilstaps.rbn.Band;
+import nl.camilstaps.rbn.Country;
 import nl.camilstaps.rbn.Entry;
 import nl.camilstaps.rbn.R;
 import nl.camilstaps.rbn.filter.AnyOfFilter;
@@ -27,6 +28,10 @@ public class FilterFragment extends PreferenceFragment
 		((MultiSelectListPreference) findPreference(RBNApplication.PREF_FILTER_MODE))
 				.setSummaryLikeEntries();
 		((MultiSelectListPreference) findPreference(RBNApplication.PREF_FILTER_TYPE))
+				.setSummaryLikeEntries();
+		((MultiSelectListPreference) findPreference(RBNApplication.PREF_FILTER_DE_CONTINENT))
+				.setSummaryLikeEntries();
+		((MultiSelectListPreference) findPreference(RBNApplication.PREF_FILTER_DX_CONTINENT))
 				.setSummaryLikeEntries();
 		((RangePreference) findPreference(RBNApplication.PREF_FILTER_SPEED))
 				.setSummaryLikeValue();
@@ -73,6 +78,22 @@ public class FilterFragment extends PreferenceFragment
 				filter.clear();
 				for (String type : pref.getValues())
 					filter.add(Entry.Type.valueOf(type));
+				break; }
+			case RBNApplication.PREF_FILTER_DE_CONTINENT: {
+				MultiSelectListPreference pref = (MultiSelectListPreference) findPreference(key);
+				pref.setSummaryLikeEntries();
+				AnyOfFilter<Country.Continent> filter = app.getDeContinentFilter();
+				filter.clear();
+				for (String type : pref.getValues())
+					filter.add(Country.Continent.fromAbbreviation(type));
+				break; }
+			case RBNApplication.PREF_FILTER_DX_CONTINENT: {
+				MultiSelectListPreference pref = (MultiSelectListPreference) findPreference(key);
+				pref.setSummaryLikeEntries();
+				AnyOfFilter<Country.Continent> filter = app.getDxContinentFilter();
+				filter.clear();
+				for (String type : pref.getValues())
+					filter.add(Country.Continent.fromAbbreviation(type));
 				break; }
 			case RBNApplication.PREF_FILTER_SPEED_MIN:
 			case RBNApplication.PREF_FILTER_SPEED_MAX: {

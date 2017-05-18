@@ -30,4 +30,18 @@
 		app:defaultMinValue="0.0"
 		app:defaultMaxValue="50.0"/>
 
+	<nl.camilstaps.android.MultiSelectListPreference
+		android:key="filter_de_continent"
+		android:title="Active stations from"
+		android:entries="@array/continents"
+		android:entryValues="@array/continent_abbreviations"
+		android:defaultValue="@array/continent_abbreviations"/>
+
+	<nl.camilstaps.android.MultiSelectListPreference
+		android:key="filter_dx_continent"
+		android:title="Loggers from"
+		android:entries="@array/continents"
+		android:entryValues="@array/continent_abbreviations"
+		android:defaultValue="@array/continent_abbreviations"/>
+
 </PreferenceScreen>

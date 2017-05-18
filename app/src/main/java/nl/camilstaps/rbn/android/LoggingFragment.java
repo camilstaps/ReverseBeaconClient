@@ -92,12 +92,12 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 
 			@Override
 			public void onDisconnected() {
-				feedback("Lost connection to RBN", null);
+				feedback(getResources().getString(R.string.connection_lost), null);
 			}
 
 			@Override
 			public void onReconnected() {
-				feedback("Reconnected to RBN", null);
+				feedback(getResources().getString(R.string.reconnected), null);
 			}
 
 			private void feedback(String extra, Exception e) {

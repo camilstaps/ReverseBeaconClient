@@ -103,27 +103,47 @@ public final class RBNApplication extends Application {
 
 	public void registerClientListener(final NewRecordListener listener) {
 		if (client == null) {
-			quickToast("Connecting...");
+			quickToast(getResources().getString(R.string.connecting));
 
 			new AsyncTask<Void, Exception, Void>() {
 				@Override
 				protected Void doInBackground(Void... x) {
-					try {
-						SharedPreferences prefs = PreferenceManager
-								.getDefaultSharedPreferences(getApplicationContext());
-						Resources ress = getApplicationContext().getResources();
-						client = new Client(
-								prefs.getString(PREF_CALLSIGN,
-										ress.getString(R.string.pref_callsign_default)),
-								prefs.getString(PREF_HOST,
-										ress.getString(R.string.pref_host_default)),
-								Integer.valueOf(prefs.getString(PREF_PORT,
-										ress.getString(R.string.pref_port_default))));
-						client.register(listener);
-						client.setFilter(compoundFilter);
-					} catch (Exception e) {
-						e.printStackTrace();
-						publishProgress(e);
+					boolean done = false;
+					while (!done) {
+						done = true;
+						try {
+							SharedPreferences prefs = PreferenceManager
+									.getDefaultSharedPreferences(getApplicationContext());
+							Resources ress = getApplicationContext().getResources();
+							client = new Client(
+									prefs.getString(PREF_CALLSIGN,
+											ress.getString(R.string.pref_callsign_default)),
+									prefs.getString(PREF_HOST,
+											ress.getString(R.string.pref_host_default)),
+									Integer.valueOf(prefs.getString(PREF_PORT,
+											ress.getString(R.string.pref_port_default))));
+							client.register(listener);
+							client.setFilter(compoundFilter);
+						} catch (Exception e) {
+							e.printStackTrace();
+							publishProgress(e);
+							done = false;
+						}
+
+						if (!done) {
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+							}
+
+							publishProgress(new Exception(
+									getResources().getString(R.string.reconnecting)));
+
+							try {
+								Thread.sleep(400); // Extra delay to show reconnecting message properly
+							} catch (InterruptedException e) {
+							}
+						}
 					}
 					return null;
 				}
@@ -133,8 +153,8 @@ public final class RBNApplication extends Application {
 						quickToast(e.getMessage());
 				}
 
-				protected void onPostExecute(Void result) {
-					quickToast("Listening...");
+				protected void onPostExecute(Void _) {
+					quickToast(getResources().getString(R.string.listening));
 				}
 			}.execute();
 		} else {

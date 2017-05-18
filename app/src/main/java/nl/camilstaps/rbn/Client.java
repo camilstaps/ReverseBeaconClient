@@ -43,7 +43,7 @@ public final class Client implements NewRecordListener {
 		connect();
 	}
 
-	public void connect() throws IllegalStateException, IOException {
+	private void connect() throws IllegalStateException, IOException {
 		if (alive)
 			throw new IllegalStateException("connect call while connected");
 

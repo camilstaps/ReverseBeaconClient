@@ -70,6 +70,9 @@
 	<string name="connecting">Connecting...</string>
 	<string name="listening">Listening...</string>
 	<string name="connect_failed">Failed to connect.</string>
+	<string name="connection_lost">Lost connection</string>
+	<string name="reconnecting">Reconnecting...</string>
+	<string name="reconnected">Reconnected</string>
 
 	<string-array name="side_nav_titles">
 		<item>List</item>

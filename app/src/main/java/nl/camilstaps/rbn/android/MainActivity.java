@@ -1,7 +1,6 @@
 package nl.camilstaps.rbn.android;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -13,18 +12,14 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.telecom.Call;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import nl.camilstaps.android.*;
 import nl.camilstaps.rbn.Callsign;
 import nl.camilstaps.rbn.R;
-import nl.camilstaps.rbn.RecordCounter;
 
 public class MainActivity extends AppCompatActivity {
 	private DrawerLayout drawer;

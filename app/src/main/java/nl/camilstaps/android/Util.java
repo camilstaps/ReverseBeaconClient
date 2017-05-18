@@ -2,7 +2,6 @@ package nl.camilstaps.android;
 
 import android.text.Html;
 import android.text.Spanned;
-import android.widget.Toast;
 
 public final class Util {
 	// http://stackoverflow.com/a/37905107/1544337

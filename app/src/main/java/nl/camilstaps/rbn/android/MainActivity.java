@@ -1,10 +1,12 @@
 package nl.camilstaps.rbn.android;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -113,9 +115,15 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void openInstructions() {
+		String info = getResources().getString(R.string.text_info);
+		try {
+			String version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+			info = info.replace("VERSION", version);
+		} catch (PackageManager.NameNotFoundException e) {}
+
 		setContentView(R.layout.activity_welcome_instructions);
 		TextView textView = (TextView) findViewById(R.id.welcome_instructions_text);
-		textView.setText(nl.camilstaps.android.Util.fromHtml(getResources().getString(R.string.text_info)));
+		textView.setText(nl.camilstaps.android.Util.fromHtml(info));
 		textView.setMovementMethod(new ScrollingMovementMethod());
 		findViewById(R.id.welcome_instructions_button).setOnClickListener(new View.OnClickListener() {
 			@Override

@@ -31,7 +31,10 @@
 		<p>For more information about the Reverse Beacon Network project, see <a href="http://www.reversebeacon.net/">reversebeacon.net</a>.</p>
 		<p>Callsign resolution is done with lists by <a href="http://country-files.com">Jim Reisert</a> AD1C.</p>
 		<h2>Getting help</h2>
-		<p>If you need help, found a bug or have a feature request, please <a href="https://github.com/camilstaps/ReverseBeaconClient/issues">open an issue on GitHub</a>.</p>
+		<p>
+			If you need help, found a bug or have a feature request, please <a href="https://github.com/camilstaps/ReverseBeaconClient/issues">open an issue on GitHub</a>.
+			Please mention that you are using version VERSION.
+		</p>
 		<h2>Author, copyright and license</h2>
 		<p>The source code of this app is copyright &copy; 2017 Camil Staps.</p>
 		<p>

@@ -15,6 +15,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import nl.camilstaps.rbn.filter.Filter;
+import nl.camilstaps.util.Logger;
 
 public final class Client implements NewRecordListener {
 	private final TelnetClient client;
@@ -37,6 +38,8 @@ public final class Client implements NewRecordListener {
 		this.host = host;
 		this.port = port;
 
+		Logger.getInstance().addEntry("Client constructor");
+
 		client = new TelnetClient();
 		client.setConnectTimeout(2000);
 
@@ -44,24 +47,34 @@ public final class Client implements NewRecordListener {
 	}
 
 	private void connect() throws IllegalStateException, IOException {
+		Logger.getInstance().addEntry("Client connect()");
+
 		if (alive)
 			throw new IllegalStateException("connect call while connected");
 
 		client.connect(host, port);
 		client.setKeepAlive(true);
 
+		Logger.getInstance().addEntry("Client connect() after connect");
+
 		inputStream = client.getInputStream();
 		final PrintStream printStream = new PrintStream(client.getOutputStream());
+
+		Logger.getInstance().addEntry("Client connect() waiting for login");
 
 		readUntil("Please enter your call:");
 		printStream.print(call + "\r\n");
 		printStream.flush();
 		readUntil(">\r\n\r\n");
 
+		Logger.getInstance().addEntry("Client connect() logged in");
+
 		alive = true;
 
 		bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 		(new Thread(new ClientThread())).start();
+
+		Logger.getInstance().addEntry("Client connect() finishing");
 	}
 
 	public void register(NewRecordListener listener) {
@@ -80,6 +93,7 @@ public final class Client implements NewRecordListener {
 		while((c = inputStream.read()) != -1) {
 			char ch = (char) c;
 			sb.append(ch);
+			Logger.getInstance().addEntry("Client readUntil(): " + sb.length() + " chars: '" + sb.toString() + "'");
 			if(ch == lastChar && sb.toString().endsWith(pattern))
 				return;
 		}
@@ -105,6 +119,8 @@ public final class Client implements NewRecordListener {
 
 	@Override
 	public void onDisconnected() {
+		Logger.getInstance().addEntry("Client onDisconnected()");
+
 		alive = false;
 		for (NewRecordListener listener : listeners)
 			listener.onDisconnected();
@@ -114,11 +130,15 @@ public final class Client implements NewRecordListener {
 			timer.schedule(new TimerTask() {
 				@Override
 				public void run() {
+					Logger.getInstance().addEntry("Client Timer reconnecting");
 					try {
 						connect();
 						onReconnected();
 						timer.cancel();
-					} catch (Exception e) {}
+					} catch (Exception e) {
+						Logger.getInstance().addEntry("Client Timer reconnect failed: ");
+						Logger.getInstance().addStackTrace(e);
+					}
 				}
 			}, 0, RECONNECT_INTERVAL);
 		} catch (Exception e) {
@@ -128,19 +148,28 @@ public final class Client implements NewRecordListener {
 
 	@Override
 	public void onReconnected() {
+		Logger.getInstance().addEntry("Client onReconnected()");
 		for (NewRecordListener listener : listeners)
 			listener.onReconnected();
 	}
 
 	private class ClientThread implements Runnable {
+		ClientThread() {
+			super();
+			Logger.getInstance().addEntry("ClientThread constructor");
+		}
+
 		@Override
 		public void run() {
+			Logger.getInstance().addEntry("ClientThread run()");
 			while (alive) {
 				try {
 					processInput();
 				} catch (SocketException e) {
+					Logger.getInstance().addStackTrace(e);
 					onDisconnected();
 				} catch (Exception e) {
+					Logger.getInstance().addStackTrace(e);
 					e.printStackTrace();
 				}
 			}
@@ -148,6 +177,8 @@ public final class Client implements NewRecordListener {
 
 		private void processInput() throws IOException {
 			String line = bufferedReader.readLine();
+
+			Logger.getInstance().addEntry("ClientThread processInput(): '" + line + "'");
 
 			if (line == null) {
 				onDisconnected();
@@ -158,6 +189,7 @@ public final class Client implements NewRecordListener {
 				Entry entry = Entry.factory(line);
 				receive(entry, filter.matches(entry));
 			} catch (ParseException e) {
+				Logger.getInstance().addStackTrace(e);
 				unparsable(line, e);
 				e.printStackTrace();
 				System.err.println(line);

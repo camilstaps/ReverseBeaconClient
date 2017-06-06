@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import nl.camilstaps.util.Logger;
+
 public class CallsignTable {
 	private final Collection<TableEntry<Collection<String>, Country>> table = new ArrayList<>();
 
@@ -25,6 +27,8 @@ public class CallsignTable {
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 		String line;
 
+		Logger.getInstance().addEntry("CallsignTable constructor");
+
 		Collection<String> prefixes = new ArrayList<>();
 		while ((line = br.readLine()) != null) {
 			if (line.charAt(0) == '>') {
@@ -36,6 +40,8 @@ public class CallsignTable {
 				prefixes.add(line);
 			}
 		}
+
+		Logger.getInstance().addEntry("CallsignTable constructor finishing");
 	}
 
 	public Country lookup(Callsign callsign) {

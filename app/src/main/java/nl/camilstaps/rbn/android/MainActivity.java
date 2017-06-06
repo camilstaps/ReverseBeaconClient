@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
 				case R.id.drawer_filters:  tag = "filters"; break;
 				case R.id.drawer_settings: tag = "settings"; break;
 				case R.id.drawer_info:     tag = "info"; break;
+				case R.id.drawer_debug:    tag = "debug"; break;
 				default: throw new RuntimeException();
 			}
 
@@ -151,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
 					case R.id.drawer_filters:  fragment = new FilterFragment(); break;
 					case R.id.drawer_settings: fragment = new SettingsFragment(); break;
 					case R.id.drawer_info:     fragment = new InfoFragment(); break;
+					case R.id.drawer_debug:    fragment = new DebugFragment(); break;
 				}
 				fragment.setRetainInstance(true);
 				add = true;
@@ -158,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
 			FragmentTransaction ft = fm.beginTransaction();
 
-			for (String t : new String[] {"log", "filters", "settings", "info"}) {
+			for (String t : new String[] {"log", "filters", "settings", "info", "debug"}) {
 				Fragment frag = fm.findFragmentByTag(t);
 				if (frag != null && frag != fragment && !frag.isHidden())
 					ft.hide(frag);

@@ -2,6 +2,7 @@ package nl.camilstaps.rbn.android;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -20,6 +21,7 @@ import nl.camilstaps.rbn.filter.AnyOfFilter;
 import nl.camilstaps.rbn.filter.CompoundFilter;
 import nl.camilstaps.rbn.filter.Filter;
 import nl.camilstaps.rbn.filter.RangeFilter;
+import nl.camilstaps.util.Logger;
 
 public final class RBNApplication extends Application {
 	public static final String PREF_CALLSIGN = "callsign";
@@ -51,6 +53,17 @@ public final class RBNApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 
+		Logger.getInstance().setAsUncaughtExceptionHandler();
+		Logger.getInstance().addEntry("RBNApplication onCreate()");
+
+		try {
+			PackageManager pacman = getPackageManager();
+			String version = pacman.getPackageInfo(getPackageName(), 0).versionName;
+			Logger.getInstance().addEntry("Info: v. " + version);
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
+
 		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
 		speedFilter = new RangeFilter(Filter.Field.Speed, 0, 0, Speed.SpeedUnit.WPM);
@@ -76,6 +89,8 @@ public final class RBNApplication extends Application {
 		for (String cont : prefs.getStringSet(PREF_FILTER_DX_CONTINENT, new ArraySet<String>()))
 			dxContFilter.add(Country.Continent.fromAbbreviation(cont));
 
+		Logger.getInstance().addEntry("RBNApplication onCreate(): starting CallsignTable setup");
+
 		new AsyncTask<Void, Void, Void>() {
 			@Override
 			protected Void doInBackground(Void... params) {
@@ -87,9 +102,12 @@ public final class RBNApplication extends Application {
 				return null;
 			}
 		}.execute();
+
+		Logger.getInstance().addEntry("RBNApplication onCreate(): finishing");
 	}
 
 	public void quickToast(String text) {
+		Logger.getInstance().addEntry("RBNApplication quickToast(): '" + text + "'");
 		if (toast == null)
 			toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
 		else
@@ -98,10 +116,12 @@ public final class RBNApplication extends Application {
 	}
 
 	public void slowToast(String text) {
+		Logger.getInstance().addEntry("RBNApplication slowToast(): '" + text + "'");
 		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
 	}
 
 	public void registerClientListener(final NewRecordListener listener) {
+		Logger.getInstance().addEntry("RBNApplication registerClientListener(): " + listener.toString());
 		if (client == null) {
 			quickToast(getResources().getString(R.string.connecting));
 
@@ -110,6 +130,7 @@ public final class RBNApplication extends Application {
 				protected Void doInBackground(Void... x) {
 					boolean done = false;
 					while (!done) {
+						Logger.getInstance().addEntry("RBNApplication Client startup iteration");
 						done = true;
 						try {
 							SharedPreferences prefs = PreferenceManager

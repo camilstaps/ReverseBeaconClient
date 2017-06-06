@@ -1,10 +1,12 @@
 package nl.camilstaps.rbn.android;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -38,10 +40,23 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 	private boolean isRegistered = false;
 	private Entry openedEntryDetails;
 
+	@TargetApi(23)
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
+		onAttachToContext(context);
+	}
 
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		if (Build.VERSION.SDK_INT < 23)
+			onAttachToContext(activity);
+	}
+
+	private void onAttachToContext(Context context) {
 		if (activity == null)
 			activity = getActivity();
 

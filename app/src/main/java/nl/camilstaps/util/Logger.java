@@ -34,6 +34,8 @@ public class Logger implements Thread.UncaughtExceptionHandler {
 				.append(entry)
 				.append("\r\n");
 
+		System.err.println(System.currentTimeMillis() + "\t" + entry);
+
 		onUpdatedContent();
 	}
 
@@ -43,6 +45,9 @@ public class Logger implements Thread.UncaughtExceptionHandler {
 				.append("\t")
 				.append(e.getMessage())
 				.append("\r\n");
+
+		System.err.println(System.currentTimeMillis() + "\t" + e.getMessage());
+		e.printStackTrace();
 
 		for (StackTraceElement el : e.getStackTrace())
 			content

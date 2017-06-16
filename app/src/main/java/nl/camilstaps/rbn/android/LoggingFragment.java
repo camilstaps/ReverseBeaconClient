@@ -40,6 +40,7 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 	private boolean isRegistered = false;
 	private Entry openedEntryDetails;
 
+	// See https://stackoverflow.com/a/33655722/1544337
 	@TargetApi(23)
 	@Override
 	public void onAttach(Context context) {

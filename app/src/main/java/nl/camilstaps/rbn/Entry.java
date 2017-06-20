@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.TimeZone;
@@ -57,6 +58,7 @@ public final class Entry implements Serializable {
 	public static Entry factory(String logline) throws ParseException {
 		try {
 			Scanner sc = new Scanner(logline);
+			sc.useLocale(Locale.US);
 
 			sc.findInLine("DX de ");
 			sc.useDelimiter("-#:");

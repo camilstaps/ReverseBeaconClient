@@ -116,9 +116,14 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 				feedback(getResources().getString(R.string.reconnected), null);
 			}
 
-			private void feedback(String extra, Exception e) {
-				((RBNApplication) getActivity().getApplication())
-						.quickToast((e != null ? e.toString() + ":\n" : "") + extra);
+			private void feedback(final String extra, final Exception e) {
+				getActivity().runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						((RBNApplication) getActivity().getApplication())
+								.quickToast((e != null ? e.toString() + ":\n" : "") + extra);
+					}
+				});
 			}
 		});
 	}

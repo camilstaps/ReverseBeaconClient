@@ -140,7 +140,7 @@
 
 	<string-array name="continent_abbreviations" translatable="false">
 		<item>AF</item>
-		<item>AU</item>
+		<item>AS</item>
 		<item>EU</item>
 		<item>NA</item>
 		<item>OC</item>
@@ -149,7 +149,7 @@
 
 	<string-array name="continents">
 		<item>Africa</item>
-		<item>Australia</item>
+		<item>Asia</item>
 		<item>Europe</item>
 		<item>North America</item>
 		<item>Oceania</item>

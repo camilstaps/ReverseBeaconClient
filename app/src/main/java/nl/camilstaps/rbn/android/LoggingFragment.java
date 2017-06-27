@@ -108,15 +108,24 @@ public class LoggingFragment extends Fragment implements AdapterView.OnItemClick
 
 			@Override
 			public void onDisconnected() {
+				if (!isAdded())
+					return;
+
 				feedback(getResources().getString(R.string.connection_lost), null);
 			}
 
 			@Override
 			public void onReconnected() {
+				if (!isAdded())
+					return;
+
 				feedback(getResources().getString(R.string.reconnected), null);
 			}
 
 			private void feedback(final String extra, final Exception e) {
+				if (!isAdded())
+					return;
+
 				getActivity().runOnUiThread(new Runnable() {
 					@Override
 					public void run() {

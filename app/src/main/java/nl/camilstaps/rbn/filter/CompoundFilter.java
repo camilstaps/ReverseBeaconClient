@@ -9,7 +9,7 @@ import java.util.List;
 
 import nl.camilstaps.rbn.Entry;
 
-public class CompoundFilter implements Filter, Collection<Filter> {
+public class CompoundFilter extends Filter implements Collection<Filter> {
 	private final List<Filter> filters;
 	private final Method method;
 
@@ -23,7 +23,7 @@ public class CompoundFilter implements Filter, Collection<Filter> {
 	}
 
 	@Override
-	public boolean matches(Entry entry) {
+	protected boolean realMatches(Entry entry) {
 		switch (method) {
 			case And:
 				for (Filter filter : filters)

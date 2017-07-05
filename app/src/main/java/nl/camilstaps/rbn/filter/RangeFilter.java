@@ -3,7 +3,7 @@ package nl.camilstaps.rbn.filter;
 import nl.camilstaps.rbn.Entry;
 import nl.camilstaps.rbn.Speed;
 
-public class RangeFilter implements Filter {
+public class RangeFilter extends Filter {
 	private float min, max;
 	final private Field field;
 	private Speed.SpeedUnit speedUnit;
@@ -44,7 +44,7 @@ public class RangeFilter implements Filter {
 	}
 
 	@Override
-	public boolean matches(Entry entry) {
+	protected boolean realMatches(Entry entry) {
 		switch (field) {
 			case Band:
 				float wavelength = entry.getBand().getWavelength();

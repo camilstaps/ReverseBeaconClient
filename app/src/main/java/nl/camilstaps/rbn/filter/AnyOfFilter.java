@@ -9,7 +9,7 @@ import java.util.List;
 
 import nl.camilstaps.rbn.Entry;
 
-public class AnyOfFilter<T> implements Filter, Collection<T> {
+public class AnyOfFilter<T> extends Filter implements Collection<T> {
 	private final List<T> values;
 	private final Field field;
 
@@ -30,7 +30,7 @@ public class AnyOfFilter<T> implements Filter, Collection<T> {
 
 	@Override
 	@SuppressWarnings("SuspiciousMethodCalls")
-	public boolean matches(Entry entry) {
+	protected boolean realMatches(Entry entry) {
 		switch (field) {
 			case Band:
 				return values.contains(entry.getBand());

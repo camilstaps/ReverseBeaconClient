@@ -5,7 +5,7 @@ import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.method.ScrollingMovementMethod;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +31,7 @@ public class InfoFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_info, container, false);
 		TextView textView = (TextView) view.findViewById(R.id.info_text);
 		textView.setText(Util.fromHtml(info));
-		textView.setMovementMethod(new ScrollingMovementMethod());
+		textView.setMovementMethod(LinkMovementMethod.getInstance());
 		return view;
 	}
 }

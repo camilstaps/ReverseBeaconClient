@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Reverse Beacon Client</string>
+	<string name="connect_failed">Verbinding mislukt.</string>
+	<string name="connecting">Verbinden...</string>
+	<string name="connection_lost">Verbinding verloren</string>
+	<string name="drawer_close">Sluiten</string>
+	<string name="drawer_filters">Filters</string>
+	<string name="drawer_info">Info, ondersteuning en feedback</string>
+	<string name="drawer_log">Lijst met stations</string>
+	<string name="drawer_open">Openen</string>
+	<string name="drawer_settings">Instellingen</string>
+	<string name="error_load_callsigns">Kon de gedetailleerde callsign-informatie niet laden</string>
+	<string name="flag_content_description">Vlag</string>
+	<string name="listening">Luisteren...</string>
+	<string name="maximum">Max</string>
+	<string name="minimum">Min</string>
+	<string name="pref_advanced">Geavanceerd</string>
+	<string name="pref_callsign">Callsign</string>
+	<string name="pref_callsign_summ">Je callsign (om op het RBN \'in te loggen\')</string>
+	<string name="pref_general">Algemeen</string>
+	<string name="pref_host">RBN host</string>
+	<string name="pref_host_summ">De telnet host om mee te verbinden</string>
+	<string name="pref_port">RBN poort</string>
+	<string name="pref_port_summ">De TCP-poort van de telnet host</string>
+	<string name="reconnected">Verbinding hersteld</string>
+	<string name="reconnecting">Verbinding herstellen...</string>
+	<string name="title_activity_settings">Instellingen</string>
+	<string name="warning_invalid_callsign">\'%1$s\' is geen correct callsign</string>
+	<string name="warning_unknown_callsign">Onbekend callsign</string>
+	<string name="welcome_button_text">Doorgaan</string>
+	<string name="welcome_instructions_button_text">Beginnen</string>
+	<string name="text_welcome">Welkom bij de Reverse Beacon Client app.
+		Het Reverse Beacon Network wil dat je je roepletters gebruikt om verbinding te maken met hun servers.
+		Voer alsjeblieft je callsign in:
+	</string>
+	<string name="text_info"><![CDATA[
+		<h2>Uitleg</h2>
+		<p>Als de app opent zie je een lijst met spots van het Reverse Beacon Network (RBN). De lijst wordt continu geüpdate.</p>
+		<p>Veeg naar rechts om het menu te openen. Daar kun je filters instellen om de spots te filteren.</p>
+		<p>In de instellingen kun je je callsign en andere voorkeuren veranderen.</p>
+		<p>Je kunt altijd terug naar deze instructies met het informatie-item in het menu.</p>
+		<h2>Verantwoording</h2>
+		<p>Ga voor meer informatie over het Reverse Beacon Network project naar <a href="http://www.reversebeacon.net/">reversebeacon.net</a>.</p>
+		<p>Gedetailleerde callsign-informatie gebeurt met lijsten van <a href="http://country-files.com">Jim Reisert</a> AD1C.</p>
+		<h2>Ondersteuning</h2>
+		<p>
+			Als je hulp nodig hebt, een bug hebt gevonden of een idee voor nieuwe functionaliteit hebt, open alsjeblieft een issue op <a href="https://github.com/camilstaps/ReverseBeaconClient/issues">GitHub</a>.
+			Vermeld dat je versie VERSION gebruikt.
+		</p>
+		<h2>Auteur, copyright en licentie</h2>
+		<p>De broncode van deze app is copyright &copy; 2017 Camil Staps.</p>
+		<p>
+			De app is ontwikkeld door <a href="https://camilstaps.nl">Camil Staps</a> PA5ET en gelicenseerd onder de GNU General Public License, version 3.
+			De broncode is beschikbaar op <a href="https://github.com/camilstaps/ReverseBeaconClient">github.com/camilstaps/ReverseBeaconClient</a>.
+		</p>
+	]]></string>
+	<string name="text_welcome_below">Ga voor meer informatie over het Reverse Beacon Network project naar <a href="http://www.reversebeacon.net/">reversebeacon.net</a>.
+		De broncode is beschikbaar op <a href="https://github.com/camilstaps/ReverseBeaconClient">github.com/camilstaps/ReverseBeaconClient</a>.
+	</string>
+</resources>

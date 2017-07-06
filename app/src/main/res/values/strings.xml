@@ -1,8 +1,6 @@
 <resources>
 	<string name="app_name">Reverse Beacon Client</string>
 
-	<string name="title" formatted="false">%1$d spots / min (%2$d total)</string>
-
 	<string name="drawer_log">Station list</string>
 	<string name="drawer_filters">Filters</string>
 	<string name="drawer_settings">Settings</string>
@@ -17,7 +15,7 @@
 	<string name="text_welcome_below">For more information about the reverse beacon network, see <a href="http://reversebeacon.net">http://reversebeacon.net</a>.
 		The source code for this app is on GitHub: <a href="https://github.com/camilstaps/ReverseBeaconClient">https://github.com/camilstaps/ReverseBeaconClient</a>.
 	</string>
-	<string name="welcome_callsign_hint">PD7LOL</string>
+	<string name="welcome_callsign_hint" translatable="false">PA5ET</string>
 	<string name="welcome_button_text">Continue</string>
 	<string name="welcome_instructions_button_text">Start</string>
 
@@ -38,7 +36,7 @@
 		<h2>Author, copyright and license</h2>
 		<p>The source code of this app is copyright &copy; 2017 Camil Staps.</p>
 		<p>
-			This app was written by <a href="https://camilstaps.nl">Camil Staps</a> PD7LOL and licensed under the GNU General Public License, version 3.
+			This app was written by <a href="https://camilstaps.nl">Camil Staps</a> PA5ET and licensed under the GNU General Public License, version 3.
 			Its source code is available at <a href="https://github.com/camilstaps/ReverseBeaconClient">github.com/camilstaps/ReverseBeaconClient</a>.
 		</p>
 	]]></string>
@@ -48,12 +46,11 @@
 	<string name="error_load_callsigns">Could not load detailed callsign information tables</string>
 
 	<string name="flag_content_description">Country flag</string>
-	<string name="band_icon_content_description"/>
 
 	<string name="minimum">Min</string>
 	<string name="maximum">Max</string>
 
-	<string name="qrz_link"><![CDATA[<a href="https://qrz.com/db/%1$s">QRZ</a>]]></string>
+	<string name="qrz_link" translatable="false"><![CDATA[<a href="https://qrz.com/db/%1$s">QRZ</a>]]></string>
 
 	<string name="title_activity_settings">Settings</string>
 
@@ -67,7 +64,7 @@
 	<string name="pref_host_summ">The telnet host to connect to</string>
 	<string name="pref_host_default" translatable="false">telnet.reversebeacon.net</string>
 	<string name="pref_port">RBN port</string>
-	<string name="pref_port_summ">The port of the telnet host</string>
+	<string name="pref_port_summ">The TCP port of the telnet host</string>
 	<string name="pref_port_default" translatable="false">7000</string>
 
 	<string name="connecting">Connecting...</string>

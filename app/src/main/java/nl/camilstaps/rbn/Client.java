@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,6 +50,7 @@ public final class Client implements NewRecordListener {
 
 		client.connect(host, port);
 		client.setKeepAlive(true);
+		client.setSoTimeout(10000);
 
 		inputStream = client.getInputStream();
 		final PrintStream printStream = new PrintStream(client.getOutputStream());
@@ -60,7 +62,7 @@ public final class Client implements NewRecordListener {
 
 		alive = true;
 
-		bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+		bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
 		(new Thread(new ClientThread())).start();
 	}
 
@@ -109,6 +111,11 @@ public final class Client implements NewRecordListener {
 		for (NewRecordListener listener : listeners)
 			listener.onDisconnected();
 
+		if (client != null)
+			try {
+				client.disconnect();
+			} catch (IOException e) {}
+
 		try {
 			final Timer timer = new Timer();
 			timer.schedule(new TimerTask() {
@@ -138,7 +145,7 @@ public final class Client implements NewRecordListener {
 			while (alive) {
 				try {
 					processInput();
-				} catch (SocketException e) {
+				} catch (SocketException | SocketTimeoutException e) {
 					onDisconnected();
 				} catch (Exception e) {
 					e.printStackTrace();

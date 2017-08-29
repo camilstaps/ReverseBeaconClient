@@ -80,7 +80,7 @@
 		<item>Settings</item>
 	</string-array>
 
-	<string-array name="bands">
+	<string-array name="bands" translatable="false">
 		<item>160m</item>
 		<item>80m</item>
 		<item>60m</item>
@@ -99,7 +99,7 @@
 		<item>33cm</item>
 		<item>23cm</item>
 	</string-array>
-	<string-array name="band_values">
+	<string-array name="band_values" translatable="false">
 		<item>16000</item>
 		<item>8000</item>
 		<item>6000</item>
@@ -119,7 +119,7 @@
 		<item>23</item>
 	</string-array>
 
-	<string-array name="modes">
+	<string-array name="modes" translatable="false">
 		<item>CW</item>
 		<item>PSK125</item>
 		<item>PSK31</item>
@@ -127,7 +127,7 @@
 		<item>RTTY</item>
 	</string-array>
 
-	<string-array name="types">
+	<string-array name="types" translatable="false">
 		<item>BEACON</item>
 		<item>CQ</item>
 		<item>DX</item>

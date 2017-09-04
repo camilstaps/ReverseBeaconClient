@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,9 +20,9 @@ public final class Client implements NewRecordListener {
 	private InputStream inputStream;
 	private BufferedReader bufferedReader;
 
-	private final String host;
-	private final int port;
-	private final String call;
+	private String host;
+	private int port;
+	private String call;
 
 	private final Collection<NewRecordListener> listeners = new ArrayList<>();
 
@@ -42,6 +40,35 @@ public final class Client implements NewRecordListener {
 		client.setConnectTimeout(2000);
 
 		connect();
+	}
+
+	public void setHost(String host) {
+		if (host.equals(this.host))
+			return;
+		this.host = host;
+		disconnect();
+	}
+
+	public void setPort(int port) {
+		if (port == this.port)
+			return;
+		this.port = port;
+		disconnect();
+	}
+
+	public void setCall(String call) {
+		if (call.equals(this.call))
+			return;
+		this.call = call;
+		disconnect();
+	}
+
+	private void disconnect() {
+		alive = false;
+		try {
+			client.disconnect();
+		} catch (IOException e) {}
+		onDisconnected();
 	}
 
 	private void connect() throws IllegalStateException, IOException {
@@ -111,11 +138,6 @@ public final class Client implements NewRecordListener {
 		for (NewRecordListener listener : listeners)
 			listener.onDisconnected();
 
-		if (client != null)
-			try {
-				client.disconnect();
-			} catch (IOException e) {}
-
 		try {
 			final Timer timer = new Timer();
 			timer.schedule(new TimerTask() {
@@ -145,7 +167,7 @@ public final class Client implements NewRecordListener {
 			while (alive) {
 				try {
 					processInput();
-				} catch (SocketException | SocketTimeoutException e) {
+				} catch (IOException e) {
 					onDisconnected();
 				} catch (Exception e) {
 					e.printStackTrace();

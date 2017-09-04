@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.util.ArraySet;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 import nl.camilstaps.rbn.Band;
 import nl.camilstaps.rbn.CallsignTable;
 import nl.camilstaps.rbn.Client;
@@ -21,7 +23,7 @@ import nl.camilstaps.rbn.filter.CompoundFilter;
 import nl.camilstaps.rbn.filter.Filter;
 import nl.camilstaps.rbn.filter.RangeFilter;
 
-public final class RBNApplication extends Application {
+public final class RBNApplication extends Application implements SharedPreferences.OnSharedPreferenceChangeListener {
 	public static final String PREF_CALLSIGN = "callsign";
 	public static final String PREF_HOST = "host";
 	public static final String PREF_PORT = "port";
@@ -62,18 +64,24 @@ public final class RBNApplication extends Application {
 		compoundFilter.add(deContFilter);
 		compoundFilter.add(dxContFilter);
 
-		for (String band : prefs.getStringSet(PREF_FILTER_BAND, new ArraySet<String>()))
+		Resources ress = getApplicationContext().getResources();
+		for (String band : prefs.getStringSet(PREF_FILTER_BAND,
+				new ArraySet<>(Arrays.asList(ress.getStringArray(R.array.band_values)))))
 			bandFilter.add(new Band(Float.valueOf(band) / 100));
-		for (String mode : prefs.getStringSet(PREF_FILTER_MODE, new ArraySet<String>()))
+		for (String mode : prefs.getStringSet(PREF_FILTER_MODE,
+				new ArraySet<>(Arrays.asList(ress.getStringArray(R.array.modes)))))
 			modeFilter.add(Entry.Mode.valueOf(mode));
-		for (String type : prefs.getStringSet(PREF_FILTER_TYPE, new ArraySet<String>()))
+		for (String type : prefs.getStringSet(PREF_FILTER_TYPE,
+				new ArraySet<>(Arrays.asList(ress.getStringArray(R.array.types)))))
 			typeFilter.add(Entry.Type.valueOf(type));
 		speedFilter.setRange(
 				prefs.getFloat(PREF_FILTER_SPEED_MIN, 0),
 				prefs.getFloat(PREF_FILTER_SPEED_MAX, 50));
-		for (String cont : prefs.getStringSet(PREF_FILTER_DE_CONTINENT, new ArraySet<String>()))
+		for (String cont : prefs.getStringSet(PREF_FILTER_DE_CONTINENT,
+				new ArraySet<>(Arrays.asList(ress.getStringArray(R.array.continent_abbreviations)))))
 			deContFilter.add(Country.Continent.fromAbbreviation(cont));
-		for (String cont : prefs.getStringSet(PREF_FILTER_DX_CONTINENT, new ArraySet<String>()))
+		for (String cont : prefs.getStringSet(PREF_FILTER_DX_CONTINENT,
+				new ArraySet<>(Arrays.asList(ress.getStringArray(R.array.continent_abbreviations)))))
 			dxContFilter.add(Country.Continent.fromAbbreviation(cont));
 
 		new AsyncTask<Void, Void, Void>() {
@@ -114,6 +122,7 @@ public final class RBNApplication extends Application {
 						try {
 							SharedPreferences prefs = PreferenceManager
 									.getDefaultSharedPreferences(getApplicationContext());
+							prefs.registerOnSharedPreferenceChangeListener(RBNApplication.this);
 							Resources ress = getApplicationContext().getResources();
 							client = new Client(
 									prefs.getString(PREF_CALLSIGN,
@@ -184,5 +193,26 @@ public final class RBNApplication extends Application {
 
 	public AnyOfFilter<Country.Continent> getDxContinentFilter() {
 		return dxContFilter;
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		if (client != null) {
+			Resources ress = getApplicationContext().getResources();
+			switch (key) {
+				case PREF_CALLSIGN:
+					client.setCall(sharedPreferences.getString(PREF_CALLSIGN,
+						ress.getString(R.string.pref_callsign_default)));
+					break;
+				case PREF_HOST:
+					client.setHost(sharedPreferences.getString(PREF_HOST,
+						ress.getString(R.string.pref_host_default)));
+					break;
+				case PREF_PORT:
+					client.setPort(Integer.valueOf(sharedPreferences.getString(PREF_PORT,
+							ress.getString(R.string.pref_port_default))));
+					break;
+			}
+		}
 	}
 }

@@ -92,8 +92,8 @@ class CTYParser:
             self.current_country = None
 
     def parse_alias(self, string):
-        match = re.match(r'[\w\/]+', string)
-        self.current_country.add_alias(match.group(0))
+        match = re.match(r'=?([\w\/]+)', string) # TODO: this is not the correct way to handle the = character
+        self.current_country.add_alias(match.group(1))
 
     def parse_country(self, line):
         if self.current_country is not None:

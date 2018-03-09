@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +32,7 @@ public final class Client implements NewRecordListener {
 	private boolean alive = false;
 	private final static int RECONNECT_INTERVAL = 1000;
 
-	public Client(String call, String host, int port) throws IOException {
+	public Client(String call, String host, int port) throws IOException, NoGoodHostException {
 		this.call = call;
 		this.host = host;
 		this.port = port;
@@ -71,9 +72,23 @@ public final class Client implements NewRecordListener {
 		onDisconnected();
 	}
 
-	private void connect() throws IllegalStateException, IOException {
+	private void connect() throws IllegalStateException, IOException, NoGoodHostException {
 		if (alive)
 			throw new IllegalStateException("connect call while connected");
+
+		InetAddress addresses[] = InetAddress.getAllByName(host);
+		InetAddress host = null;
+		for (InetAddress addr : addresses) {
+			if (!addr.getHostAddress().equals("66.228.35.189")) {
+				// This IP is blacklisted. It is a beta server, which disconnects every so often.
+				host = addr;
+				break;
+			}
+		}
+
+		if (host == null) {
+			throw new NoGoodHostException();
+		}
 
 		client.connect(host, port);
 		client.setKeepAlive(true);
@@ -85,7 +100,7 @@ public final class Client implements NewRecordListener {
 		readUntil("Please enter your call:");
 		printStream.print(call + "\r\n");
 		printStream.flush();
-		readUntil(">\r\n\r\n");
+		readUntil(">\r\n\r\n", "server.\r\n");
 
 		alive = true;
 
@@ -101,16 +116,18 @@ public final class Client implements NewRecordListener {
 		this.filter = filter;
 	}
 
-	private void readUntil(String pattern) throws IOException {
-		char lastChar = pattern.charAt(pattern.length() - 1);
+	private void readUntil(String... patterns) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		int c;
 
 		while((c = inputStream.read()) != -1) {
 			char ch = (char) c;
 			sb.append(ch);
-			if(ch == lastChar && sb.toString().endsWith(pattern))
-				return;
+			for (String pattern : patterns) {
+				char lastChar = pattern.charAt(pattern.length() - 1);
+				if (ch == lastChar && sb.toString().endsWith(pattern))
+					return;
+			}
 		}
 	}
 
@@ -191,6 +208,12 @@ public final class Client implements NewRecordListener {
 				e.printStackTrace();
 				System.err.println(line);
 			}
+		}
+	}
+
+	public class NoGoodHostException extends Exception {
+		NoGoodHostException() {
+			super("No good host found (change the host in Settings).");
 		}
 	}
 }

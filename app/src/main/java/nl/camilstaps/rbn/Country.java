@@ -24,12 +24,12 @@ public class Country {
 	}
 
 	public enum Continent {
-		Africa, Australia, Europe, NorthAmerica, Oceania, SouthAmerica;
+		Africa, Asia, Europe, NorthAmerica, Oceania, SouthAmerica;
 
 		public static Continent fromAbbreviation(String abbreviation) {
 			switch (abbreviation) {
 				case "AF": return Africa;
-				case "AU": return Australia;
+				case "AS": return Asia;
 				case "EU": return Europe;
 				case "NA": return NorthAmerica;
 				case "OC": return Oceania;

@@ -221,7 +221,7 @@ public final class Entry implements Serializable {
 	}
 
 	public enum Mode implements Serializable {
-		CW, PSK125, PSK31, PSK63, RTTY
+		CW, FT8, PSK125, PSK31, PSK63, RTTY
 	}
 
 	public enum Type implements Serializable {

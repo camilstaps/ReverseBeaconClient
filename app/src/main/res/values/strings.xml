@@ -121,6 +121,7 @@
 
 	<string-array name="modes" translatable="false">
 		<item>CW</item>
+		<item>FT8</item>
 		<item>PSK125</item>
 		<item>PSK31</item>
 		<item>PSK63</item>

@@ -6,9 +6,9 @@ android {
     defaultConfig {
         applicationId "nl.camilstaps.rbn"
         minSdkVersion 15
-        targetSdkVersion 27
-        versionCode 13
-        versionName "1.1.8a"
+        targetSdkVersion 29
+        versionCode 14
+        versionName "1.1.8b"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -25,9 +25,9 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile 'com.android.support:appcompat-v7:27+'
     compile 'commons-net:commons-net:3.5'
-    compile 'com.android.support:support-v4:27.1.1'
-    compile 'com.android.support:design:27.1.1'
+    compile 'com.android.support:support-v4:27+'
+    compile 'com.android.support:design:27+'
     testCompile 'junit:junit:4.12'
 }

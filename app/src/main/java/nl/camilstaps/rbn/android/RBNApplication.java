@@ -162,7 +162,7 @@ public final class RBNApplication extends Application implements SharedPreferenc
 						quickToast(e.getMessage());
 				}
 
-				protected void onPostExecute(Void _) {
+				protected void onPostExecute(Void v) {
 					quickToast(getResources().getString(R.string.listening));
 				}
 			}.execute();

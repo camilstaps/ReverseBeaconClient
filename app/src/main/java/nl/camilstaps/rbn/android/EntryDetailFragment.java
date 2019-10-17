@@ -99,7 +99,7 @@ public class EntryDetailFragment extends DialogFragment {
 		private final Context context;
 		private final Entry entry;
 
-		RecordArrayAdapter(Context context, Entry entry) {
+		RecordArrayAdapter(Context context, @NonNull Entry entry) {
 			super(context, -1, entry.getRecords());
 			this.context = context;
 			this.entry = entry;

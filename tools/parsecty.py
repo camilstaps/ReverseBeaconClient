@@ -48,12 +48,12 @@ class Country:
         self.aliases.append(alias)
 
     def __str__(self):
-        return '%s\n>%s;%s;%s;%s' % (
-                '\n'.join(self.aliases),
+        return '>%s;%s;%s;%s\n%s' % (
                 self.name,
                 '-'.join(self.isocodes),
                 self.continent,
-                self.primary_prefix)
+                self.primary_prefix,
+                '\n'.join(self.aliases))
 
 class CTYParser:
     def __init__(self):

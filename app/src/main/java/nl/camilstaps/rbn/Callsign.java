@@ -1,5 +1,7 @@
 package nl.camilstaps.rbn;
 
+import android.support.annotation.Nullable;
+
 public final class Callsign {
 	private final String callsign;
 	private String description;
@@ -17,13 +19,14 @@ public final class Callsign {
 		return callsign;
 	}
 
+	@Nullable
 	public Country getCountry() {
 		return CallsignTable.getInstance().lookup(this);
 	}
 
 	public String getDescription(String defaultValue) {
 		if (description == null) {
-			Country country = CallsignTable.getInstance().lookup(this);
+			Country country = getCountry();
 			description = country != null ? country.getName() : defaultValue;
 		}
 

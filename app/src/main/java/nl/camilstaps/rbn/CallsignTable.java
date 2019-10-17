@@ -1,15 +1,13 @@
 package nl.camilstaps.rbn;
 
+import android.support.annotation.Nullable;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collection;
 
 public class CallsignTable {
-	private final Collection<TableEntry<Collection<String>, Country>> table = new ArrayList<>();
-
 	private static CallsignTable instance;
 
 	public static CallsignTable getInstance() {
@@ -21,43 +19,85 @@ public class CallsignTable {
 			instance = new CallsignTable(inputStream);
 	}
 
+	private final Trie<Country> trie = new Trie<>();
+
 	private CallsignTable(InputStream inputStream) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 		String line;
 
-		Collection<String> prefixes = new ArrayList<>();
+		Country country = null;
 		while ((line = br.readLine()) != null) {
 			if (line.charAt(0) == '>') {
 				String[] parts = line.substring(1).split(";");
-				Country country = new Country(parts[0], parts[2], parts[1].split("-"));
-				table.add(new TableEntry<>(prefixes, country));
-				prefixes = new ArrayList<>();
+				country = new Country(parts[0], parts[2], parts[1].split("-"));
 			} else {
-				prefixes.add(line);
+				trie.addPrefix(line, country);
 			}
 		}
 	}
 
+	@Nullable
 	public Country lookup(Callsign callsign) {
-		for (TableEntry<Collection<String>, Country> entry : table)
-			for (String prefix : entry.prefixes)
-				if (matches(prefix, callsign.toString()))
-					return entry.country;
-		return null;
+		return trie.getValue(callsign.toString());
 	}
 
-	private static boolean matches(String prefix, String callsign) {
-		return callsign.length() >= prefix.length() &&
-				callsign.substring(0, prefix.length()).equals(prefix);
-	}
+	private static class Trie<T> {
+		T value = null;
+		Trie<T>[] children;
 
-	private static class TableEntry<A,B> {
-		final A prefixes;
-		final B country;
+		Trie() {
+			this.children = new Trie[37];
+		}
 
-		TableEntry(A prefixes, B country) {
-			this.prefixes = prefixes;
-			this.country = country;
+		static int index(char c) {
+			if (Character.isDigit(c))
+				return c-'0';
+			else if (Character.isUpperCase(c))
+				return c-'A'+10;
+			else if (c=='/')
+				return 36;
+			else
+				throw new IllegalArgumentException("Unknown character '" + c +  "' in callsign");
+		}
+
+		void addPrefix(String string, T value) {
+			addPrefix(string, 0, value);
+		}
+
+		void addPrefix(String string, int start, T value) {
+			if (start >= string.length()) {
+				this.value = value;
+				return;
+			}
+
+			int i = Trie.index(string.charAt(start));
+
+			if (children[i] == null)
+				children[i] = new Trie<T>();
+
+			children[i].addPrefix(string, start+1, value);
+		}
+
+		T getValue(String string) {
+			return getValue(string, 0, null);
+		}
+
+		T getValue(String string, int start, T currentValue) {
+			currentValue = this.value == null ? currentValue : this.value;
+
+			if (start >= string.length())
+				return currentValue;
+
+			try {
+				int i = Trie.index(string.charAt(start));
+
+				if (children[i]==null)
+					return currentValue;
+
+				return children[i].getValue(string, start+1, currentValue);
+			} catch (IllegalArgumentException e) {
+				return currentValue;
+			}
 		}
 	}
 }
